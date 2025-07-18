@@ -21,6 +21,7 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `INomadConverter` – extensibility point for custom serialization and deserialization.
 - `NomadSerializerOptions` – configuration container including custom converters and policy settings.
 - `NomadSerializer` – high level serializer that reflects over objects and uses the configured writer and reader.
+- `INomadTypeInfoResolver` – abstraction that supplies serializable members for a type. The default implementation uses reflection but source generators can provide AOT friendly metadata.
 - Attribute types under the `Nomad.Net.Attributes` namespace provide optional metadata:
   - `NomadFieldAttribute` – explicit field identifiers.
   - `NomadIgnoreAttribute` – skip a member.
@@ -67,4 +68,12 @@ dotnet pack src/Nomad.Net/Nomad.Net.csproj -c Release
 - All public members are documented with XML comments.
 - Nullable reference types are enabled.
 - `LangVersion` is set to `latest` to allow modern C# syntax.
+
+## Ahead-Of-Time (AOT) Support
+
+The serializer can operate without runtime reflection by providing an `INomadTypeInfoResolver`
+implementation generated at compile time. This allows applications targeting
+NativeAOT to supply precomputed metadata for their types. The
+`ReflectionNomadTypeInfoResolver` remains the default for convenient dynamic
+usage.
 

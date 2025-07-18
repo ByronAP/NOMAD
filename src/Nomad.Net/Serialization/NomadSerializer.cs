@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Linq;
 using Nomad.Net.Attributes;
 
 namespace Nomad.Net.Serialization
@@ -158,12 +159,9 @@ namespace Nomad.Net.Serialization
             return null;
         }
 
-        private static IEnumerable<MemberInfo> GetSerializableMembers(Type type)
+        private IEnumerable<MemberInfo> GetSerializableMembers(Type type)
         {
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
-            return type.GetMembers(flags)
-                .Where(m => m.MemberType == MemberTypes.Property || m.MemberType == MemberTypes.Field)
-                .Where(m => !Attribute.IsDefined(m, typeof(NomadIgnoreAttribute)));
+            return _options.TypeInfoResolver.GetSerializableMembers(type);
         }
     }
 }

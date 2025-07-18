@@ -1,4 +1,5 @@
 using System.Text;
+using System;
 
 namespace Nomad.Net.Serialization
 {
@@ -29,26 +30,46 @@ namespace Nomad.Net.Serialization
         {
             if (value is null)
             {
-                _writer.Write((byte)0);
+                _writer.Write((byte)NomadValueKind.Null);
                 return;
             }
 
             if (type == typeof(int))
             {
-                _writer.Write((byte)1);
+                _writer.Write((byte)NomadValueKind.Int32);
                 _writer.Write((int)value);
             }
             else if (type == typeof(string))
             {
-                _writer.Write((byte)2);
+                _writer.Write((byte)NomadValueKind.String);
                 _writer.Write((string)value);
             }
             else if (type == typeof(byte[]))
             {
-                _writer.Write((byte)3);
+                _writer.Write((byte)NomadValueKind.Binary);
                 var buffer = (byte[])value;
                 _writer.Write(buffer.Length);
                 _writer.Write(buffer);
+            }
+            else if (type == typeof(bool))
+            {
+                _writer.Write((byte)NomadValueKind.Boolean);
+                _writer.Write((bool)value ? (byte)1 : (byte)0);
+            }
+            else if (type == typeof(long))
+            {
+                _writer.Write((byte)NomadValueKind.Int64);
+                _writer.Write((long)value);
+            }
+            else if (type == typeof(float))
+            {
+                _writer.Write((byte)NomadValueKind.Single);
+                _writer.Write((float)value);
+            }
+            else if (type == typeof(double))
+            {
+                _writer.Write((byte)NomadValueKind.Double);
+                _writer.Write((double)value);
             }
             else
             {
