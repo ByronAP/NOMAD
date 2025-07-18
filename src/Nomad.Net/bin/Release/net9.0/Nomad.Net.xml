@@ -249,6 +249,22 @@
             <param name="type">The target enumerable type.</param>
             <returns>The populated enumerable instance.</returns>
         </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.WriteMap(Nomad.Net.Serialization.INomadWriter,System.Collections.IEnumerable,System.Type)">
+            <summary>
+            Writes a dictionary to the output stream.
+            </summary>
+            <param name="writer">The writer instance.</param>
+            <param name="dictionary">The dictionary to serialize.</param>
+            <param name="type">The runtime type of the dictionary.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.ReadMap(Nomad.Net.Serialization.INomadReader,System.Type)">
+            <summary>
+            Reads a dictionary from the input stream.
+            </summary>
+            <param name="reader">The reader instance.</param>
+            <param name="type">The runtime dictionary type.</param>
+            <returns>The populated dictionary instance.</returns>
+        </member>
         <member name="T:Nomad.Net.Serialization.NomadSerializerOptions">
             <summary>
             Provides configuration for <see cref="T:Nomad.Net.Serialization.NomadSerializer"/>.
