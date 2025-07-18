@@ -1,5 +1,3 @@
-using System;
-
 namespace Nomad.Net.Serialization
 {
     /// <summary>
