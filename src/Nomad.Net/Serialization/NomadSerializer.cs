@@ -53,6 +53,9 @@ namespace Nomad.Net.Serialization
                 return;
             }
 
+            writer.WriteToken(NomadToken.StartObject);
+
+            bool first = true;
             foreach (var member in GetSerializableMembers(type))
             {
                 object? memberValue = member switch
@@ -73,41 +76,84 @@ namespace Nomad.Net.Serialization
                     continue;
                 }
 
+                if (!first)
+                {
+                    writer.WriteToken(NomadToken.ValueSeparator);
+                }
+
                 int fieldId = fieldAttr?.FieldId ?? member.MetadataToken;
                 writer.WriteFieldHeader(fieldId);
+                writer.WriteToken(NomadToken.NameSeparator);
                 WriteValue(writer, memberValue, memberValue.GetType());
+                first = false;
             }
+
+            writer.WriteToken(NomadToken.EndObject);
         }
 
         private object? ReadObject(INomadReader reader, Type type)
         {
+            if (reader.ReadToken() != NomadToken.StartObject)
+            {
+                throw new FormatException("Expected start of object.");
+            }
+
             object? instance = Activator.CreateInstance(type);
             var members = GetSerializableMembers(type).ToDictionary(m => m.GetCustomAttribute<NomadFieldAttribute>()?.FieldId ?? m.MetadataToken);
-            int? fieldId;
-            while ((fieldId = reader.ReadFieldHeader()) != null)
+
+            if (reader.PeekToken() == NomadToken.EndObject)
             {
+                reader.ReadToken();
+                return instance;
+            }
+
+            while (true)
+            {
+                int? fieldId = reader.ReadFieldHeader();
+                if (fieldId is null)
+                {
+                    throw new FormatException("Unexpected end of object.");
+                }
+
+                if (reader.ReadToken() != NomadToken.NameSeparator)
+                {
+                    throw new FormatException("Expected name separator.");
+                }
+
                 if (!members.TryGetValue(fieldId.Value, out var member))
                 {
                     // Unknown field - skip value
-                    reader.ReadValue(typeof(object));
-                    continue;
+                    ReadValue(reader, typeof(object));
+                }
+                else
+                {
+                    Type memberType = member switch
+                    {
+                        PropertyInfo pi => pi.PropertyType,
+                        FieldInfo fi => fi.FieldType,
+                        _ => typeof(object)
+                    };
+
+                    object? value = ReadValue(reader, memberType);
+                    if (member is PropertyInfo prop)
+                    {
+                        prop.SetValue(instance, value);
+                    }
+                    else if (member is FieldInfo field)
+                    {
+                        field.SetValue(instance, value);
+                    }
                 }
 
-                Type memberType = member switch
+                var token = reader.ReadToken();
+                if (token == NomadToken.EndObject)
                 {
-                    PropertyInfo pi => pi.PropertyType,
-                    FieldInfo fi => fi.FieldType,
-                    _ => typeof(object)
-                };
-
-                object? value = ReadValue(reader, memberType);
-                if (member is PropertyInfo prop)
-                {
-                    prop.SetValue(instance, value);
+                    break;
                 }
-                else if (member is FieldInfo field)
+
+                if (token != NomadToken.ValueSeparator)
                 {
-                    field.SetValue(instance, value);
+                    throw new FormatException("Invalid object delimiter.");
                 }
             }
 
@@ -126,6 +172,13 @@ namespace Nomad.Net.Serialization
             if (type.IsPrimitive || type == typeof(string) || type == typeof(byte[]))
             {
                 writer.WriteValue(value, type);
+                return;
+            }
+
+            if (typeof(IDictionary).IsAssignableFrom(type) ||
+                type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+            {
+                WriteMap(writer, value as IEnumerable, type);
                 return;
             }
 
@@ -149,6 +202,12 @@ namespace Nomad.Net.Serialization
             if (type.IsPrimitive || type == typeof(string) || type == typeof(byte[]))
             {
                 return reader.ReadValue(type);
+            }
+
+            if (typeof(IDictionary).IsAssignableFrom(type) ||
+                type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+            {
+                return ReadMap(reader, type);
             }
 
             if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) && type != typeof(byte[]))
@@ -267,6 +326,130 @@ namespace Nomad.Net.Serialization
             }
 
             return genericList;
+        }
+
+        /// <summary>
+        /// Writes a dictionary to the output stream.
+        /// </summary>
+        /// <param name="writer">The writer instance.</param>
+        /// <param name="dictionary">The dictionary to serialize.</param>
+        /// <param name="type">The runtime type of the dictionary.</param>
+        private void WriteMap(INomadWriter writer, IEnumerable? dictionary, Type type)
+        {
+            Type keyType = typeof(object);
+            Type valueType = typeof(object);
+            if (type.IsGenericType)
+            {
+                var args = type.GetGenericArguments();
+                keyType = args[0];
+                valueType = args[1];
+            }
+
+            writer.WriteToken(NomadToken.StartObject);
+            bool first = true;
+            if (dictionary is not null)
+            {
+                foreach (var entry in dictionary)
+                {
+                    object? key;
+                    object? value;
+                    if (entry is DictionaryEntry de)
+                    {
+                        key = de.Key;
+                        value = de.Value;
+                    }
+                    else
+                    {
+                        var eType = entry.GetType();
+                        key = eType.GetProperty("Key")?.GetValue(entry);
+                        value = eType.GetProperty("Value")?.GetValue(entry);
+                    }
+
+                    if (!first)
+                    {
+                        writer.WriteToken(NomadToken.ValueSeparator);
+                    }
+
+                    WriteValue(writer, key, keyType);
+                    writer.WriteToken(NomadToken.NameSeparator);
+                    WriteValue(writer, value, valueType);
+                    first = false;
+                }
+            }
+
+            writer.WriteToken(NomadToken.EndObject);
+        }
+
+        /// <summary>
+        /// Reads a dictionary from the input stream.
+        /// </summary>
+        /// <param name="reader">The reader instance.</param>
+        /// <param name="type">The runtime dictionary type.</param>
+        /// <returns>The populated dictionary instance.</returns>
+        private object? ReadMap(INomadReader reader, Type type)
+        {
+            if (reader.ReadToken() != NomadToken.StartObject)
+            {
+                throw new FormatException("Expected start of map.");
+            }
+
+            Type keyType = typeof(object);
+            Type valueType = typeof(object);
+            if (type.IsGenericType)
+            {
+                var args = type.GetGenericArguments();
+                keyType = args[0];
+                valueType = args[1];
+            }
+
+            var entries = new List<(object? Key, object? Value)>();
+
+            if (reader.PeekToken() == NomadToken.EndObject)
+            {
+                reader.ReadToken();
+            }
+            else
+            {
+                while (true)
+                {
+                    object? key = ReadValue(reader, keyType);
+                    if (reader.ReadToken() != NomadToken.NameSeparator)
+                    {
+                        throw new FormatException("Expected name separator.");
+                    }
+
+                    object? value = ReadValue(reader, valueType);
+                    entries.Add((key, value));
+
+                    var token = reader.ReadToken();
+                    if (token == NomadToken.EndObject)
+                    {
+                        break;
+                    }
+                    if (token != NomadToken.ValueSeparator)
+                    {
+                        throw new FormatException("Invalid map delimiter.");
+                    }
+                }
+            }
+
+            IDictionary result;
+            if (typeof(IDictionary).IsAssignableFrom(type))
+            {
+                result = (IDictionary)Activator.CreateInstance(type)!;
+            }
+            else
+            {
+                var dictType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
+                result = (IDictionary)Activator.CreateInstance(dictType)!;
+            }
+
+            foreach (var (Key, Value) in entries)
+            {
+                result.Add(Key, Value);
+            }
+
+            return result;
         }
 
         private IEnumerable<MemberInfo> GetSerializableMembers(Type type)
