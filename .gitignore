@@ -1,0 +1,35 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# Build files
+build/
+dist/
+*.o
+*.so
+*.dll
+*.exe
+
+# Language specific
+__pycache__/
+*.pyc
+node_modules/
+target/
+*.class
+
+# Test files
+*.test
+*.tmp
+coverage/
+
+# NOMAD binary files (for testing)
+*.nmd.bin
+*.nmd.debug
