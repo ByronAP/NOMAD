@@ -30,6 +30,10 @@ target/
 *.tmp
 coverage/
 
+# .NET build outputs
+bin/
+obj/
+
 # NOMAD binary files (for testing)
 *.nmd.bin
 *.nmd.debug

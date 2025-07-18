@@ -193,10 +193,13 @@ NOMAD excels in scenarios requiring both efficiency and inspectability:
 | Language | Status | Repository | Package |
 |----------|--------|------------|---------|
 | Python | Planned | - | - |
+| C# | Prototype | [src/Nomad.Net](src/Nomad.Net) | - |
 | Go | Planned | - | - |
 | Rust | Planned | - | - |
 | JavaScript/TypeScript | Planned | - | - |
 | C | Planned | - | - |
+
+The C# implementation is documented in [IMPLEMENTATION.md](IMPLEMENTATION.md).
 
 ### Community Implementations
 
