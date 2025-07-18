@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nomad.Net</name>
+    </assembly>
+    <members>
+        <member name="T:Nomad.Net.Attributes.NomadFieldAttribute">
+            <summary>
+            Specifies the NOMAD field identifier for a member.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Attributes.NomadFieldAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Attributes.NomadFieldAttribute"/> class.
+            </summary>
+            <param name="fieldId">The integer field identifier.</param>
+        </member>
+        <member name="P:Nomad.Net.Attributes.NomadFieldAttribute.FieldId">
+            <summary>
+            Gets the NOMAD field identifier.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Attributes.NomadIgnoreAttribute">
+            <summary>
+            Indicates that a member should be ignored during NOMAD serialization and deserialization.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Attributes.NomadMetaAttribute">
+            <summary>
+            Provides an extensible mechanism to attach custom metadata to a member.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Attributes.NomadMetaAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Attributes.NomadMetaAttribute"/> class.
+            </summary>
+            <param name="name">The metadata name.</param>
+            <param name="value">The metadata value.</param>
+        </member>
+        <member name="P:Nomad.Net.Attributes.NomadMetaAttribute.Name">
+            <summary>
+            Gets the metadata name.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Attributes.NomadMetaAttribute.Value">
+            <summary>
+            Gets the metadata value.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Attributes.NomadResolverAttribute">
+            <summary>
+            Specifies the fully qualified name of an <see cref="T:Nomad.Net.Serialization.INomadTypeInfoResolver"/>
+            to use for the annotated type.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Attributes.NomadResolverAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Attributes.NomadResolverAttribute"/> class.
+            </summary>
+            <param name="resolverType">The type name of the resolver.</param>
+        </member>
+        <member name="P:Nomad.Net.Attributes.NomadResolverAttribute.ResolverType">
+            <summary>
+            Gets the fully qualified resolver type name.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Serialization.INomadConverter">
+            <summary>
+            Defines methods to convert between managed objects and the NOMAD representation.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this converter can handle the specified type.
+            </summary>
+            <param name="type">The target type.</param>
+            <returns><c>true</c> if the converter can serialize the type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadConverter.Write(Nomad.Net.Serialization.INomadWriter,System.Object)">
+            <summary>
+            Writes the specified value using the provided writer.
+            </summary>
+            <param name="writer">The <see cref="T:Nomad.Net.Serialization.INomadWriter"/> to write to.</param>
+            <param name="value">The value to write.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadConverter.Read(Nomad.Net.Serialization.INomadReader,System.Type)">
+            <summary>
+            Reads a value using the provided reader.
+            </summary>
+            <param name="reader">The <see cref="T:Nomad.Net.Serialization.INomadReader"/> to read from.</param>
+            <param name="type">The target type.</param>
+            <returns>The deserialized value.</returns>
+        </member>
+        <member name="T:Nomad.Net.Serialization.INomadReader">
+            <summary>
+            Reads the NOMAD binary format.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadReader.ReadFieldHeader">
+            <summary>
+            Reads a field header.
+            </summary>
+            <returns>The field identifier, or <c>null</c> if there are no more fields.</returns>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadReader.ReadToken">
+            <summary>
+            Reads a structural token from the stream.
+            </summary>
+            <returns>The token read.</returns>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadReader.PeekToken">
+            <summary>
+            Peeks at the next structural token without consuming it.
+            </summary>
+            <returns>The next token.</returns>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadReader.ReadValue(System.Type)">
+            <summary>
+            Reads a value of the specified type.
+            </summary>
+            <param name="type">The expected type.</param>
+            <returns>The value read from the stream.</returns>
+        </member>
+        <member name="T:Nomad.Net.Serialization.INomadTypeInfoResolver">
+            <summary>
+            Resolves the serializable members for a given type.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadTypeInfoResolver.GetSerializableMembers(System.Type)">
+            <summary>
+            Gets the members that should be serialized for the specified type.
+            </summary>
+            <param name="type">The type to inspect.</param>
+            <returns>The members that should be serialized.</returns>
+        </member>
+        <member name="T:Nomad.Net.Serialization.INomadWriter">
+            <summary>
+            Writes the NOMAD binary format.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadWriter.WriteFieldHeader(System.Int32)">
+            <summary>
+            Writes a field header.
+            </summary>
+            <param name="fieldId">The field identifier.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadWriter.WriteToken(Nomad.Net.Serialization.NomadToken)">
+            <summary>
+            Writes a structural token.
+            </summary>
+            <param name="token">The token to write.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadWriter.WriteValue(System.Object,System.Type)">
+            <summary>
+            Writes a value of the specified type.
+            </summary>
+            <param name="value">The value to write.</param>
+            <param name="type">The runtime type of the value.</param>
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadBinaryReader">
+            <summary>
+            Default implementation of <see cref="T:Nomad.Net.Serialization.INomadReader"/> that reads the NOMAD format from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Serialization.NomadBinaryReader"/> class.
+            </summary>
+            <param name="stream">The input stream.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.ReadFieldHeader">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.ReadToken">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.PeekToken">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.ReadValue(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadBinaryWriter">
+            <summary>
+            Default implementation of <see cref="T:Nomad.Net.Serialization.INomadWriter"/> that writes the NOMAD format to a <see cref="T:System.IO.Stream"/>.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Serialization.NomadBinaryWriter"/> class.
+            </summary>
+            <param name="stream">The output stream.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.WriteFieldHeader(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.WriteToken(Nomad.Net.Serialization.NomadToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.WriteValue(System.Object,System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadSerializer">
+            <summary>
+            Serializes and deserializes objects using the NOMAD binary format.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.#ctor(Nomad.Net.Serialization.NomadSerializerOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Serialization.NomadSerializer"/> class.
+            </summary>
+            <param name="options">The serializer options.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.Serialize``1(Nomad.Net.Serialization.INomadWriter,``0)">
+            <summary>
+            Serializes an object to the provided writer.
+            </summary>
+            <param name="writer">The writer to use.</param>
+            <param name="value">The value to serialize.</param>
+            <typeparam name="T">The type of the value.</typeparam>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.Deserialize``1(Nomad.Net.Serialization.INomadReader)">
+            <summary>
+            Deserializes an object from the provided reader.
+            </summary>
+            <param name="reader">The reader to use.</param>
+            <typeparam name="T">The target type.</typeparam>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.WriteArray(Nomad.Net.Serialization.INomadWriter,System.Collections.IEnumerable,System.Type)">
+            <summary>
+            Writes an enumerable to the output stream.
+            </summary>
+            <param name="writer">The writer instance.</param>
+            <param name="values">The values to serialize.</param>
+            <param name="type">The runtime type of the enumerable.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.ReadArray(Nomad.Net.Serialization.INomadReader,System.Type)">
+            <summary>
+            Reads an enumerable value from the input stream.
+            </summary>
+            <param name="reader">The reader to consume.</param>
+            <param name="type">The target enumerable type.</param>
+            <returns>The populated enumerable instance.</returns>
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadSerializerOptions">
+            <summary>
+            Provides configuration for <see cref="T:Nomad.Net.Serialization.NomadSerializer"/>.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Serialization.NomadSerializerOptions.Converters">
+            <summary>
+            Gets or sets the converters used for custom serialization.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Serialization.NomadSerializerOptions.RequireFieldAttribute">
+            <summary>
+            Gets or sets a value indicating whether to require explicit <see cref="T:Nomad.Net.Attributes.NomadFieldAttribute"/> annotations.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Serialization.NomadSerializerOptions.TypeInfoResolver">
+            <summary>
+            Gets or sets the resolver used to discover serializable members for a type.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadToken">
+            <summary>
+            Represents structural tokens used by the NOMAD format.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.StartObject">
+            <summary>
+            Indicates the start of an object.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.EndObject">
+            <summary>
+            Indicates the end of an object.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.StartArray">
+            <summary>
+            Indicates the start of an array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.EndArray">
+            <summary>
+            Indicates the end of an array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.ValueSeparator">
+            <summary>
+            Separates elements in an array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.NameSeparator">
+            <summary>
+            Separates a key from its value.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadValueKind">
+            <summary>
+            Represents the primitive value kinds supported by the binary serializer.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Null">
+            <summary>
+            Indicates a null value.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Int32">
+            <summary>
+            A 32-bit signed integer.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.String">
+            <summary>
+            A UTF-8 encoded string.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Binary">
+            <summary>
+            A byte array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Boolean">
+            <summary>
+            A boolean value.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Int64">
+            <summary>
+            A 64-bit signed integer.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Single">
+            <summary>
+            A 32-bit floating point value.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Double">
+            <summary>
+            A 64-bit floating point value.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Serialization.ReflectionNomadTypeInfoResolver">
+            <summary>
+            Resolves serializable members using runtime reflection.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.ReflectionNomadTypeInfoResolver.GetSerializableMembers(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nomad.Net.Serialization.GeneratedNomadTypeInfoResolver">
+            <summary>
+            Resolver generated at compile time.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.GeneratedNomadTypeInfoResolver.GetSerializableMembers(System.Type)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

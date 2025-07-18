@@ -350,6 +350,11 @@ The following conditions **SHOULD** be handled gracefully:
 - Type mismatches (implementation-defined behavior)
 - Fields present that are marked deprecated
 
+> **Implementation Note:**
+> The reference .NET library included in this repository currently throws a
+> `NotSupportedException` when an unknown field is encountered during
+> deserialization. Future versions are expected to properly skip such fields.
+
 ### 6.3. Parsing Algorithm
 
 ```mermaid
