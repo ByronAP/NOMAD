@@ -206,6 +206,22 @@
             <typeparam name="T">The target type.</typeparam>
             <returns>The deserialized object.</returns>
         </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.WriteArray(Nomad.Net.Serialization.INomadWriter,System.Collections.IEnumerable,System.Type)">
+            <summary>
+            Writes an enumerable to the output stream.
+            </summary>
+            <param name="writer">The writer instance.</param>
+            <param name="values">The values to serialize.</param>
+            <param name="type">The runtime type of the enumerable.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.ReadArray(Nomad.Net.Serialization.INomadReader,System.Type)">
+            <summary>
+            Reads an enumerable value from the input stream.
+            </summary>
+            <param name="reader">The reader to consume.</param>
+            <param name="type">The target enumerable type.</param>
+            <returns>The populated enumerable instance.</returns>
+        </member>
         <member name="T:Nomad.Net.Serialization.NomadSerializerOptions">
             <summary>
             Provides configuration for <see cref="T:Nomad.Net.Serialization.NomadSerializer"/>.

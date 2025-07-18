@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Linq;
+using System.Collections;
 using Nomad.Net.Attributes;
 
 namespace Nomad.Net.Serialization
@@ -127,6 +128,12 @@ namespace Nomad.Net.Serialization
                 return;
             }
 
+            if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) && type != typeof(byte[]))
+            {
+                WriteArray(writer, (IEnumerable?)value, type);
+                return;
+            }
+
             WriteObject(writer, value, type);
         }
 
@@ -143,6 +150,11 @@ namespace Nomad.Net.Serialization
                 return reader.ReadValue(type);
             }
 
+            if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) && type != typeof(byte[]))
+            {
+                return ReadArray(reader, type);
+            }
+
             return ReadObject(reader, type);
         }
 
@@ -157,6 +169,75 @@ namespace Nomad.Net.Serialization
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Writes an enumerable to the output stream.
+        /// </summary>
+        /// <param name="writer">The writer instance.</param>
+        /// <param name="values">The values to serialize.</param>
+        /// <param name="type">The runtime type of the enumerable.</param>
+        private void WriteArray(INomadWriter writer, IEnumerable? values, Type type)
+        {
+            Type elementType = type.IsArray ? type.GetElementType()! :
+                type.IsGenericType ? type.GetGenericArguments()[0] : typeof(object);
+            var list = values is ICollection col ?
+                new List<object?>(col.Cast<object?>()) :
+                values?.Cast<object?>().ToList() ?? new List<object?>();
+
+            writer.WriteValue(list.Count, typeof(int));
+            foreach (var item in list)
+            {
+                WriteValue(writer, item, elementType);
+            }
+        }
+
+        /// <summary>
+        /// Reads an enumerable value from the input stream.
+        /// </summary>
+        /// <param name="reader">The reader to consume.</param>
+        /// <param name="type">The target enumerable type.</param>
+        /// <returns>The populated enumerable instance.</returns>
+        private object? ReadArray(INomadReader reader, Type type)
+        {
+            int length = (int)(reader.ReadValue(typeof(int)) ?? 0);
+            Type elementType = type.IsArray ? type.GetElementType()! :
+                type.IsGenericType ? type.GetGenericArguments()[0] : typeof(object);
+            var items = new object?[length];
+            for (int i = 0; i < length; i++)
+            {
+                items[i] = ReadValue(reader, elementType);
+            }
+
+            if (type.IsArray)
+            {
+                Array array = Array.CreateInstance(elementType, length);
+                for (int i = 0; i < length; i++)
+                {
+                    array.SetValue(items[i], i);
+                }
+
+                return array;
+            }
+
+            if (typeof(IList).IsAssignableFrom(type))
+            {
+                var result = (IList)Activator.CreateInstance(type)!;
+                foreach (var item in items)
+                {
+                    result.Add(item);
+                }
+
+                return result;
+            }
+
+            var genericList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
+            foreach (var item in items)
+            {
+                genericList.Add(item);
+            }
+
+            return genericList;
         }
 
         private IEnumerable<MemberInfo> GetSerializableMembers(Type type)
