@@ -47,6 +47,23 @@
             Gets the metadata value.
             </summary>
         </member>
+        <member name="T:Nomad.Net.Attributes.NomadResolverAttribute">
+            <summary>
+            Specifies the fully qualified name of an <see cref="T:Nomad.Net.Serialization.INomadTypeInfoResolver"/>
+            to use for the annotated type.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Attributes.NomadResolverAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nomad.Net.Attributes.NomadResolverAttribute"/> class.
+            </summary>
+            <param name="resolverType">The type name of the resolver.</param>
+        </member>
+        <member name="P:Nomad.Net.Attributes.NomadResolverAttribute.ResolverType">
+            <summary>
+            Gets the fully qualified resolver type name.
+            </summary>
+        </member>
         <member name="T:Nomad.Net.Serialization.INomadConverter">
             <summary>
             Defines methods to convert between managed objects and the NOMAD representation.

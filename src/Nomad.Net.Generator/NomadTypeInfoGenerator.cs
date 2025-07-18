@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace Nomad.Net.Generator
 {
     /// <summary>
-    /// Generates a compile-time <see cref="Nomad.Net.Serialization.INomadTypeInfoResolver"/> implementation.
+    /// Generates a compile-time resolver used for ahead-of-time serialization.
     /// </summary>
     [Generator]
     public sealed class NomadTypeInfoGenerator : ISourceGenerator
@@ -36,9 +36,7 @@ namespace Nomad.Net.Generator
                     }
 
                     bool custom = typeSymbol.GetAttributes().Any(a =>
-                        a.AttributeClass?.Name == "NomadMetaAttribute" &&
-                        a.ConstructorArguments.Length == 2 &&
-                        a.ConstructorArguments[0].Value is string name && name == "Resolver");
+                        a.AttributeClass?.Name == "NomadResolverAttribute");
                     if (custom)
                     {
                         continue;

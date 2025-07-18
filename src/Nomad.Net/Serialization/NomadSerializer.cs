@@ -161,10 +161,10 @@ namespace Nomad.Net.Serialization
 
         private IEnumerable<MemberInfo> GetSerializableMembers(Type type)
         {
-            var meta = type.GetCustomAttributes<NomadMetaAttribute>()
-                .FirstOrDefault(m => m.Name == "Resolver");
+            var resolverAttr = type.GetCustomAttribute<Attributes.NomadResolverAttribute>();
 
-            if (meta is not null && Type.GetType(meta.Value) is { } resolverType &&
+            if (resolverAttr is not null &&
+                Type.GetType(resolverAttr.ResolverType) is { } resolverType &&
                 Activator.CreateInstance(resolverType) is INomadTypeInfoResolver resolver)
             {
                 return resolver.GetSerializableMembers(type);

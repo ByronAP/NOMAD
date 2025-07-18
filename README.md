@@ -58,7 +58,7 @@ NOMAD addresses the fundamental trade-off between human readability and storage 
 
 ### 🧮 AOT Friendly
 - A source generator produces a `GeneratedNomadTypeInfoResolver` for AOT builds
-- Use `NomadMeta("Resolver", "My.Custom.Resolver")` on a type to supply your own resolver
+- Use `NomadResolver("My.Custom.Resolver")` on a type to supply your own resolver
 - Works with NativeAOT by providing an `INomadTypeInfoResolver`
 
 ### 🛡️ Type Safe
