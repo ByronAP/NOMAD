@@ -1,0 +1,7 @@
+{
+  "entries": [
+    {"level": "INFO", "message": "Server started", "timestamp": 1627494000},
+    {"level": "WARN", "message": "High memory usage", "timestamp": 1627494060},
+    {"level": "ERROR", "message": "Unhandled exception", "timestamp": 1627494120, "metadata": {"userId": 42}}
+  ]
+}

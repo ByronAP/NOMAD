@@ -1,7 +1,7 @@
 @nomad:1
 @refs{1:device_id:S,2:readings:[{3:F32,4:F32,5:I64}],3:temperature:F32,4:humidity:F32,5:timestamp:I64}
 {1:"SENSOR-001",2:[
-  {3:[binary: 23.5],4:[binary: 45.2],5:[binary: 1634567890]},
-  {3:[binary: 23.6],4:[binary: 45.1],5:[binary: 1634567950]},
-  {3:[binary: 23.7],4:[binary: 45.0],5:[binary: 1634568010]}
+  {3:████,4:████,5:████████},
+  {3:████,4:████,5:████████},
+  {3:████,4:████,5:████████}
 ]}

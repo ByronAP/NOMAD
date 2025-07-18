@@ -1,0 +1,8 @@
+{
+  "device_id": "SENSOR-001",
+  "readings": [
+    {"temperature": 23.5, "humidity": 45.2, "timestamp": 1634567890},
+    {"temperature": 23.6, "humidity": 45.1, "timestamp": 1634567950},
+    {"temperature": 23.7, "humidity": 45.0, "timestamp": 1634568010}
+  ]
+}
