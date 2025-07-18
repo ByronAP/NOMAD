@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using Nomad.Net.Attributes;
 
 namespace Nomad.Net.Serialization
@@ -127,6 +129,12 @@ namespace Nomad.Net.Serialization
                 return;
             }
 
+            if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) && type != typeof(byte[]))
+            {
+                WriteArray(writer, (IEnumerable?)value, type);
+                return;
+            }
+
             WriteObject(writer, value, type);
         }
 
@@ -143,6 +151,11 @@ namespace Nomad.Net.Serialization
                 return reader.ReadValue(type);
             }
 
+            if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) && type != typeof(byte[]))
+            {
+                return ReadArray(reader, type);
+            }
+
             return ReadObject(reader, type);
         }
 
@@ -157,6 +170,103 @@ namespace Nomad.Net.Serialization
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Writes an enumerable to the output stream.
+        /// </summary>
+        /// <param name="writer">The writer instance.</param>
+        /// <param name="values">The values to serialize.</param>
+        /// <param name="type">The runtime type of the enumerable.</param>
+        private void WriteArray(INomadWriter writer, IEnumerable? values, Type type)
+        {
+            Type elementType = type.IsArray ? type.GetElementType()! :
+                type.IsGenericType ? type.GetGenericArguments()[0] : typeof(object);
+            var list = values is ICollection col ?
+                new List<object?>(col.Cast<object?>()) :
+                values?.Cast<object?>().ToList() ?? new List<object?>();
+
+            writer.WriteToken(NomadToken.StartArray);
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i > 0)
+                {
+                    writer.WriteToken(NomadToken.ValueSeparator);
+                }
+
+                WriteValue(writer, list[i], elementType);
+            }
+
+            writer.WriteToken(NomadToken.EndArray);
+        }
+
+        /// <summary>
+        /// Reads an enumerable value from the input stream.
+        /// </summary>
+        /// <param name="reader">The reader to consume.</param>
+        /// <param name="type">The target enumerable type.</param>
+        /// <returns>The populated enumerable instance.</returns>
+        private object? ReadArray(INomadReader reader, Type type)
+        {
+            if (reader.ReadToken() != NomadToken.StartArray)
+            {
+                throw new FormatException("Expected start of array.");
+            }
+
+            Type elementType = type.IsArray ? type.GetElementType()! :
+                type.IsGenericType ? type.GetGenericArguments()[0] : typeof(object);
+            var items = new List<object?>();
+
+            if (reader.PeekToken() == NomadToken.EndArray)
+            {
+                reader.ReadToken();
+            }
+            else
+            {
+                while (true)
+                {
+                    items.Add(ReadValue(reader, elementType));
+                    var token = reader.ReadToken();
+                    if (token == NomadToken.EndArray)
+                    {
+                        break;
+                    }
+                    if (token != NomadToken.ValueSeparator)
+                    {
+                        throw new FormatException("Invalid array delimiter.");
+                    }
+                }
+            }
+
+            if (type.IsArray)
+            {
+                Array array = Array.CreateInstance(elementType, items.Count);
+                for (int i = 0; i < items.Count; i++)
+                {
+                    array.SetValue(items[i], i);
+                }
+
+                return array;
+            }
+
+            if (typeof(IList).IsAssignableFrom(type))
+            {
+                var result = (IList)Activator.CreateInstance(type)!;
+                foreach (var item in items)
+                {
+                    result.Add(item);
+                }
+
+                return result;
+            }
+
+            var genericList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
+            foreach (var item in items)
+            {
+                genericList.Add(item);
+            }
+
+            return genericList;
         }
 
         private IEnumerable<MemberInfo> GetSerializableMembers(Type type)

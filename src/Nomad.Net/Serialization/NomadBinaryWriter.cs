@@ -26,6 +26,12 @@ namespace Nomad.Net.Serialization
         }
 
         /// <inheritdoc />
+        public void WriteToken(NomadToken token)
+        {
+            _writer.Write((byte)token);
+        }
+
+        /// <inheritdoc />
         public void WriteValue(object? value, Type type)
         {
             if (value is null)

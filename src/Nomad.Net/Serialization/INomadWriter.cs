@@ -12,6 +12,12 @@ namespace Nomad.Net.Serialization
         void WriteFieldHeader(int fieldId);
 
         /// <summary>
+        /// Writes a structural token.
+        /// </summary>
+        /// <param name="token">The token to write.</param>
+        void WriteToken(NomadToken token);
+
+        /// <summary>
         /// Writes a value of the specified type.
         /// </summary>
         /// <param name="value">The value to write.</param>
