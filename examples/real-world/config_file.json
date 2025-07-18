@@ -1,0 +1,18 @@
+{
+  "app_name": "MyApp",
+  "version": "1.2.3",
+  "debug": true,
+  "port": 36895,
+  "database": {
+    "host": "localhost",
+    "name": "myapp_db",
+    "port": 3389,
+    "user": "dbuser",
+    "password": "p@ssw0rd!"
+  },
+  "paths": {
+    "data": "C:\\Program Files\\MyApp\\data",
+    "logs": "C:\\Program Files\\MyApp\\logs",
+    "temp": "C:\\Users\\Temp"
+  }
+}

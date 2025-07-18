@@ -1,0 +1,3 @@
+@nomad:1
+@refs{1:file_id:U32,2:data:X}
+{1:0x0000002a,2:█████...raw bytes...}

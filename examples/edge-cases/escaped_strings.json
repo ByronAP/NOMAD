@@ -1,0 +1,7 @@
+{
+  "quotes": "She said \"Hello\"",
+  "backslash": "C:\\Users\\Admin",
+  "controls": "Line1\nLine2\tTabbed\rCarriage",
+  "unicode": "Emoji: \u263A \u2764",
+  "json": "{\"nested\":\"json\"}"
+}

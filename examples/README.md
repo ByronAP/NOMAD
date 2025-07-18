@@ -1,6 +1,6 @@
 # NOMAD Example Files
 
-This directory contains example NOMAD files demonstrating various features of the format.
+This directory contains example NOMAD files demonstrating various features of the format.  Each `.nmd` example has a matching `.json` file that encodes the same data using conventional JSON syntax.
 
 ## File Types
 
@@ -29,6 +29,9 @@ Application configuration demonstrating type safety and string escaping.
 ### log_entries.nmd
 Server logs showing how NOMAD handles varied record structures.
 
+### geolocation.nmd
+Latitude and longitude readings with timestamps.
+
 ## Edge Cases
 
 ### empty_values.nmd
@@ -50,3 +53,4 @@ hexdump -C filename.nmd
 Or with the NOMAD CLI tool (when available):
 ```bash
 nomad-cli dump filename.nmd
+```
