@@ -1,4 +1,5 @@
 using System.Text;
+using System;
 
 namespace Nomad.Net.Serialization
 {
@@ -33,23 +34,39 @@ namespace Nomad.Net.Serialization
         public object? ReadValue(Type type)
         {
             byte kind = _reader.ReadByte();
-            if (kind == 0)
+            if (kind == (byte)NomadValueKind.Null)
             {
                 return null;
             }
 
-            if (type == typeof(int) && kind == 1)
+            if (type == typeof(int) && kind == (byte)NomadValueKind.Int32)
             {
                 return _reader.ReadInt32();
             }
-            else if (type == typeof(string) && kind == 2)
+            else if (type == typeof(string) && kind == (byte)NomadValueKind.String)
             {
                 return _reader.ReadString();
             }
-            else if (type == typeof(byte[]) && kind == 3)
+            else if (type == typeof(byte[]) && kind == (byte)NomadValueKind.Binary)
             {
                 int len = _reader.ReadInt32();
                 return _reader.ReadBytes(len);
+            }
+            else if (type == typeof(bool) && kind == (byte)NomadValueKind.Boolean)
+            {
+                return _reader.ReadByte() != 0;
+            }
+            else if (type == typeof(long) && kind == (byte)NomadValueKind.Int64)
+            {
+                return _reader.ReadInt64();
+            }
+            else if (type == typeof(float) && kind == (byte)NomadValueKind.Single)
+            {
+                return _reader.ReadSingle();
+            }
+            else if (type == typeof(double) && kind == (byte)NomadValueKind.Double)
+            {
+                return _reader.ReadDouble();
             }
 
             throw new NotSupportedException($"Unsupported type: {type}");

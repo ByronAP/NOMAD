@@ -14,5 +14,10 @@ namespace Nomad.Net.Serialization
         /// Gets or sets a value indicating whether to require explicit <see cref="Attributes.NomadFieldAttribute"/> annotations.
         /// </summary>
         public bool RequireFieldAttribute { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resolver used to discover serializable members for a type.
+        /// </summary>
+        public INomadTypeInfoResolver TypeInfoResolver { get; set; } = new ReflectionNomadTypeInfoResolver();
     }
 }

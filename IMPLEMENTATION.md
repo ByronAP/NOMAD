@@ -9,6 +9,7 @@ This document describes the architecture and implementation guidelines for the o
 - Optional attributes for precise control similar to `System.Text.Json`.
 - Generated XML documentation to assist consumers and tooling.
 - Compatibility with any CLR object even when no attributes are present.
+- Capable of ahead-of-time (AOT) compilation through the `INomadTypeInfoResolver` abstraction.
 
 ## Project Structure
 
@@ -21,10 +22,13 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `INomadConverter` – extensibility point for custom serialization and deserialization.
 - `NomadSerializerOptions` – configuration container including custom converters and policy settings.
 - `NomadSerializer` – high level serializer that reflects over objects and uses the configured writer and reader.
+- `INomadTypeInfoResolver` – abstraction that supplies serializable members for a type. The default implementation uses reflection but a source generator emits a `GeneratedNomadTypeInfoResolver` for AOT scenarios.
+- `NomadValueKind` – enumeration of primitive markers used by the binary writer and reader.
 - Attribute types under the `Nomad.Net.Attributes` namespace provide optional metadata:
   - `NomadFieldAttribute` – explicit field identifiers.
   - `NomadIgnoreAttribute` – skip a member.
   - `NomadMetaAttribute` – custom metadata similar to JSON annotations.
+  - `NomadResolverAttribute` – specify a custom `INomadTypeInfoResolver` for a type using `NomadResolver("My.Custom.Resolver")`.
 
 ## Using the Library
 
@@ -67,4 +71,12 @@ dotnet pack src/Nomad.Net/Nomad.Net.csproj -c Release
 - All public members are documented with XML comments.
 - Nullable reference types are enabled.
 - `LangVersion` is set to `latest` to allow modern C# syntax.
+
+## Ahead-Of-Time (AOT) Support
+
+The library **MUST** operate in environments where runtime reflection is not
+available. All serialization metadata can be supplied at compile time via an
+implementation of <see cref="INomadTypeInfoResolver"/>. Applications targeting
+NativeAOT or similar ahead-of-time compilation models provide the resolver to
+ensure full functionality. The <see cref="ReflectionNomadTypeInfoResolver"/> remains the default for convenient dynamic usage when reflection is permitted. A source generator included in the library emits a `GeneratedNomadTypeInfoResolver` used when no custom resolver is provided. Types may declare `[NomadResolver("My.Custom.Resolver")]` to override the generated resolver.
 
