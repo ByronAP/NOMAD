@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nomad.Net.Generator</name>
+    </assembly>
+    <members>
+        <member name="T:Nomad.Net.Generator.NomadTypeInfoGenerator">
+            <summary>
+            Generates a compile-time resolver used for ahead-of-time serialization.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Generator.NomadTypeInfoGenerator.Initialize(Microsoft.CodeAnalysis.GeneratorInitializationContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Generator.NomadTypeInfoGenerator.Execute(Microsoft.CodeAnalysis.GeneratorExecutionContext)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

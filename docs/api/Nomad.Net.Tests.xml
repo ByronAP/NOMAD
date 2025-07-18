@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nomad.Net.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Nomad.Net.Tests.ArraySerializationTests">
+            <summary>
+            Tests array serialization semantics.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.ArraySerializationTests.RoundTrip_IntArray">
+            <summary>
+            Ensures arrays of integers round-trip correctly.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.ArraySerializationTests.RoundTrip_StringList">
+            <summary>
+            Ensures arrays of strings round-trip correctly.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.CustomConverterTests">
+            <summary>
+            Tests custom converter usage.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.CustomConverterTests.GuidConverter_RoundTrip">
+            <summary>
+            Exercises a custom converter for <see cref="T:System.Guid"/> values.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.GuidConverter">
+            <summary>
+            Converter for <see cref="T:System.Guid"/> values using string representation.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.GuidConverter.CanConvert(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Tests.GuidConverter.Write(Nomad.Net.Serialization.INomadWriter,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Tests.GuidConverter.Read(Nomad.Net.Serialization.INomadReader,System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.GuidContainer">
+            <summary>
+            Model holding a <see cref="T:System.Guid"/> value.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.GuidContainer.Id">
+            <summary>
+            Gets or sets the identifier.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.IntArrayContainer">
+            <summary>
+            Model containing an integer array for testing purposes.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.IntArrayContainer.Values">
+            <summary>
+            Gets or sets the values.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.Person">
+            <summary>
+            Simple person model for serialization tests.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.Person.Id">
+            <summary>
+            Gets or sets the identifier.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.Person.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.PersonV2">
+            <summary>
+            Extended person model containing an additional field.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.PersonV2.Id">
+            <summary>
+            Gets or sets the identifier.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.PersonV2.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.PersonV2.Extra">
+            <summary>
+            Gets or sets an extra value not present in <see cref="T:Nomad.Net.Tests.Models.Person"/>.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.StringArrayContainer">
+            <summary>
+            Model containing a string array for testing purposes.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.StringArrayContainer.Values">
+            <summary>
+            Gets or sets the values.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.ObjectSerializationTests">
+            <summary>
+            Tests object serialization using <see cref="T:Nomad.Net.Serialization.NomadSerializer"/>.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.ObjectSerializationTests.RoundTrip_Person">
+            <summary>
+            Verifies that a simple object can be serialized and deserialized.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.ObjectSerializationTests.UnknownField_IsSkipped">
+            <summary>
+            Demonstrates behavior when encountering an unknown field.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.PrimitiveValueTests">
+            <summary>
+            Tests primitive value serialization.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Int32(System.Int32)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Int32"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Int64(System.Int64)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Int64"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Single(System.Single)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Single"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Double(System.Double)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Double"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Boolean(System.Boolean)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Boolean"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_String(System.String)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.String"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Binary">
+            <summary>
+            Validates round-trip serialization of binary data.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Null">
+            <summary>
+            Validates round-trip serialization of <see langword="null"/> values.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.ReflectionResolverTests">
+            <summary>
+            Tests behavior of <see cref="T:Nomad.Net.Serialization.ReflectionNomadTypeInfoResolver"/>.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.ReflectionResolverTests.Resolver_ReturnsExpectedMembers">
+            <summary>
+            Ensures the resolver filters ignored members.
+            </summary>
+        </member>
+    </members>
+</doc>
