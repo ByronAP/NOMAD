@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.Net", "Nomad.Net\Nomad.Net.csproj", "{E43B6325-16BB-415E-BB41-79D6A1175A57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.Net.Generator", "Nomad.Net.Generator\Nomad.Net.Generator.csproj", "{6D566596-61F7-4D02-B1B9-1A01F7AF5120}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{E43B6325-16BB-415E-BB41-79D6A1175A57}.Release|x64.Build.0 = Release|Any CPU
 		{E43B6325-16BB-415E-BB41-79D6A1175A57}.Release|x86.ActiveCfg = Release|Any CPU
 		{E43B6325-16BB-415E-BB41-79D6A1175A57}.Release|x86.Build.0 = Release|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Debug|x64.ActiveCfg = Debug|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Debug|x64.Build.0 = Debug|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Debug|x86.ActiveCfg = Debug|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Debug|x86.Build.0 = Debug|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Release|Any CPU.Build.0 = Release|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Release|x64.ActiveCfg = Release|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Release|x64.Build.0 = Release|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Release|x86.ActiveCfg = Release|Any CPU
+                {6D566596-61F7-4D02-B1B9-1A01F7AF5120}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

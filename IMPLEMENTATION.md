@@ -22,12 +22,12 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `INomadConverter` – extensibility point for custom serialization and deserialization.
 - `NomadSerializerOptions` – configuration container including custom converters and policy settings.
 - `NomadSerializer` – high level serializer that reflects over objects and uses the configured writer and reader.
-- `INomadTypeInfoResolver` – abstraction that supplies serializable members for a type. The default implementation uses reflection but source generators can provide AOT friendly metadata.
+- `INomadTypeInfoResolver` – abstraction that supplies serializable members for a type. The default implementation uses reflection but a source generator emits a `GeneratedNomadTypeInfoResolver` for AOT scenarios.
 - `NomadValueKind` – enumeration of primitive markers used by the binary writer and reader.
 - Attribute types under the `Nomad.Net.Attributes` namespace provide optional metadata:
   - `NomadFieldAttribute` – explicit field identifiers.
   - `NomadIgnoreAttribute` – skip a member.
-  - `NomadMetaAttribute` – custom metadata similar to JSON annotations.
+  - `NomadMetaAttribute` – custom metadata similar to JSON annotations. Use `NomadMeta("Resolver", "My.Custom.Resolver")` on a type to specify a custom resolver.
 
 ## Using the Library
 
@@ -78,5 +78,7 @@ available. All serialization metadata can be supplied at compile time via an
 implementation of <see cref="INomadTypeInfoResolver"/>. Applications targeting
 NativeAOT or similar ahead-of-time compilation models provide the resolver to
 ensure full functionality. The <see cref="ReflectionNomadTypeInfoResolver"/>
+A source generator included in the library emits a `GeneratedNomadTypeInfoResolver` used when no custom resolver is provided.
+Types may declare `[NomadMeta("Resolver", "My.Custom.Resolver")]` to override the generated resolver.
 remains the default for convenient dynamic usage when reflection is permitted.
 

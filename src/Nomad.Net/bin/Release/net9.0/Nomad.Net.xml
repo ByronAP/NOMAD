@@ -262,5 +262,13 @@
         <member name="M:Nomad.Net.Serialization.ReflectionNomadTypeInfoResolver.GetSerializableMembers(System.Type)">
             <inheritdoc />
         </member>
+        <member name="T:Nomad.Net.Serialization.GeneratedNomadTypeInfoResolver">
+            <summary>
+            Resolver generated at compile time.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Serialization.GeneratedNomadTypeInfoResolver.GetSerializableMembers(System.Type)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
