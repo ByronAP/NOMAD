@@ -9,6 +9,8 @@ namespace Nomad.Net.Serialization
     public sealed class NomadBinaryReader : INomadReader, IDisposable
     {
         private readonly BinaryReader _reader;
+        private bool _hasPeeked;
+        private byte _peekByte;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NomadBinaryReader"/> class.
@@ -17,6 +19,17 @@ namespace Nomad.Net.Serialization
         public NomadBinaryReader(Stream stream)
         {
             _reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen: true);
+        }
+
+        private byte ReadByteInternal()
+        {
+            if (_hasPeeked)
+            {
+                _hasPeeked = false;
+                return _peekByte;
+            }
+
+            return _reader.ReadByte();
         }
 
         /// <inheritdoc />
@@ -31,9 +44,27 @@ namespace Nomad.Net.Serialization
         }
 
         /// <inheritdoc />
+        public NomadToken ReadToken()
+        {
+            return (NomadToken)ReadByteInternal();
+        }
+
+        /// <inheritdoc />
+        public NomadToken PeekToken()
+        {
+            if (!_hasPeeked)
+            {
+                _peekByte = _reader.ReadByte();
+                _hasPeeked = true;
+            }
+
+            return (NomadToken)_peekByte;
+        }
+
+        /// <inheritdoc />
         public object? ReadValue(Type type)
         {
-            byte kind = _reader.ReadByte();
+            byte kind = ReadByteInternal();
             if (kind == (byte)NomadValueKind.Null)
             {
                 return null;
@@ -54,7 +85,7 @@ namespace Nomad.Net.Serialization
             }
             else if (type == typeof(bool) && kind == (byte)NomadValueKind.Boolean)
             {
-                return _reader.ReadByte() != 0;
+                return ReadByteInternal() != 0;
             }
             else if (type == typeof(long) && kind == (byte)NomadValueKind.Int64)
             {

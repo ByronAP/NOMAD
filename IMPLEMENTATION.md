@@ -24,7 +24,7 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `NomadSerializer` – high level serializer that reflects over objects and uses the configured writer and reader.
 - `INomadTypeInfoResolver` – abstraction that supplies serializable members for a type. The default implementation uses reflection but a source generator emits a `GeneratedNomadTypeInfoResolver` for AOT scenarios.
 - `NomadValueKind` – enumeration of primitive markers used by the binary writer and reader.
-- Arrays and collections are supported natively and encoded using a length-prefixed sequence of elements.
+- Arrays and collections are supported natively and encoded using structural delimiters without length prefixes.
 - Attribute types under the `Nomad.Net.Attributes` namespace provide optional metadata:
   - `NomadFieldAttribute` – explicit field identifiers.
   - `NomadIgnoreAttribute` – skip a member.

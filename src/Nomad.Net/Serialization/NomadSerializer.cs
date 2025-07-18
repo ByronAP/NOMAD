@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using Nomad.Net.Attributes;
 
 namespace Nomad.Net.Serialization
@@ -185,11 +186,18 @@ namespace Nomad.Net.Serialization
                 new List<object?>(col.Cast<object?>()) :
                 values?.Cast<object?>().ToList() ?? new List<object?>();
 
-            writer.WriteValue(list.Count, typeof(int));
-            foreach (var item in list)
+            writer.WriteToken(NomadToken.StartArray);
+            for (int i = 0; i < list.Count; i++)
             {
-                WriteValue(writer, item, elementType);
+                if (i > 0)
+                {
+                    writer.WriteToken(NomadToken.ValueSeparator);
+                }
+
+                WriteValue(writer, list[i], elementType);
             }
+
+            writer.WriteToken(NomadToken.EndArray);
         }
 
         /// <summary>
@@ -200,19 +208,40 @@ namespace Nomad.Net.Serialization
         /// <returns>The populated enumerable instance.</returns>
         private object? ReadArray(INomadReader reader, Type type)
         {
-            int length = (int)(reader.ReadValue(typeof(int)) ?? 0);
+            if (reader.ReadToken() != NomadToken.StartArray)
+            {
+                throw new FormatException("Expected start of array.");
+            }
+
             Type elementType = type.IsArray ? type.GetElementType()! :
                 type.IsGenericType ? type.GetGenericArguments()[0] : typeof(object);
-            var items = new object?[length];
-            for (int i = 0; i < length; i++)
+            var items = new List<object?>();
+
+            if (reader.PeekToken() == NomadToken.EndArray)
             {
-                items[i] = ReadValue(reader, elementType);
+                reader.ReadToken();
+            }
+            else
+            {
+                while (true)
+                {
+                    items.Add(ReadValue(reader, elementType));
+                    var token = reader.ReadToken();
+                    if (token == NomadToken.EndArray)
+                    {
+                        break;
+                    }
+                    if (token != NomadToken.ValueSeparator)
+                    {
+                        throw new FormatException("Invalid array delimiter.");
+                    }
+                }
             }
 
             if (type.IsArray)
             {
-                Array array = Array.CreateInstance(elementType, length);
-                for (int i = 0; i < length; i++)
+                Array array = Array.CreateInstance(elementType, items.Count);
+                for (int i = 0; i < items.Count; i++)
                 {
                     array.SetValue(items[i], i);
                 }

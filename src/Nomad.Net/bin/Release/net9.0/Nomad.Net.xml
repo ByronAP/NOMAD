@@ -102,6 +102,18 @@
             </summary>
             <returns>The field identifier, or <c>null</c> if there are no more fields.</returns>
         </member>
+        <member name="M:Nomad.Net.Serialization.INomadReader.ReadToken">
+            <summary>
+            Reads a structural token from the stream.
+            </summary>
+            <returns>The token read.</returns>
+        </member>
+        <member name="M:Nomad.Net.Serialization.INomadReader.PeekToken">
+            <summary>
+            Peeks at the next structural token without consuming it.
+            </summary>
+            <returns>The next token.</returns>
+        </member>
         <member name="M:Nomad.Net.Serialization.INomadReader.ReadValue(System.Type)">
             <summary>
             Reads a value of the specified type.
@@ -132,6 +144,12 @@
             </summary>
             <param name="fieldId">The field identifier.</param>
         </member>
+        <member name="M:Nomad.Net.Serialization.INomadWriter.WriteToken(Nomad.Net.Serialization.NomadToken)">
+            <summary>
+            Writes a structural token.
+            </summary>
+            <param name="token">The token to write.</param>
+        </member>
         <member name="M:Nomad.Net.Serialization.INomadWriter.WriteValue(System.Object,System.Type)">
             <summary>
             Writes a value of the specified type.
@@ -153,6 +171,12 @@
         <member name="M:Nomad.Net.Serialization.NomadBinaryReader.ReadFieldHeader">
             <inheritdoc />
         </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.ReadToken">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryReader.PeekToken">
+            <inheritdoc />
+        </member>
         <member name="M:Nomad.Net.Serialization.NomadBinaryReader.ReadValue(System.Type)">
             <inheritdoc />
         </member>
@@ -171,6 +195,9 @@
             <param name="stream">The output stream.</param>
         </member>
         <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.WriteFieldHeader(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.WriteToken(Nomad.Net.Serialization.NomadToken)">
             <inheritdoc />
         </member>
         <member name="M:Nomad.Net.Serialization.NomadBinaryWriter.WriteValue(System.Object,System.Type)">
@@ -240,6 +267,41 @@
         <member name="P:Nomad.Net.Serialization.NomadSerializerOptions.TypeInfoResolver">
             <summary>
             Gets or sets the resolver used to discover serializable members for a type.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Serialization.NomadToken">
+            <summary>
+            Represents structural tokens used by the NOMAD format.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.StartObject">
+            <summary>
+            Indicates the start of an object.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.EndObject">
+            <summary>
+            Indicates the end of an object.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.StartArray">
+            <summary>
+            Indicates the start of an array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.EndArray">
+            <summary>
+            Indicates the end of an array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.ValueSeparator">
+            <summary>
+            Separates elements in an array.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadToken.NameSeparator">
+            <summary>
+            Separates a key from its value.
             </summary>
         </member>
         <member name="T:Nomad.Net.Serialization.NomadValueKind">
