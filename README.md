@@ -56,6 +56,11 @@ NOMAD addresses the fundamental trade-off between human readability and storage 
 - No string parsing for numeric values
 - Integer key comparison faster than strings
 
+### 🧮 AOT Friendly
+
+- Serialization metadata can be generated at compile time
+- Works with NativeAOT by providing an `INomadTypeInfoResolver`
+
 ### 🛡️ Type Safe
 
 - Optional type validation
@@ -215,6 +220,8 @@ All implementations **MUST**:
 - Implement varint encoding for binary data (max 10 bytes)
 - Validate version headers
 - Provide clear error messages
+- Be compatible with ahead-of-time (AOT) compilation via compile-time metadata
+  supplied through `INomadTypeInfoResolver` or equivalent mechanisms
 
 ## Tools
 

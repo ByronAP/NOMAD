@@ -9,6 +9,7 @@ This document describes the architecture and implementation guidelines for the o
 - Optional attributes for precise control similar to `System.Text.Json`.
 - Generated XML documentation to assist consumers and tooling.
 - Compatibility with any CLR object even when no attributes are present.
+- Capable of ahead-of-time (AOT) compilation through the `INomadTypeInfoResolver` abstraction.
 
 ## Project Structure
 
@@ -22,6 +23,7 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `NomadSerializerOptions` – configuration container including custom converters and policy settings.
 - `NomadSerializer` – high level serializer that reflects over objects and uses the configured writer and reader.
 - `INomadTypeInfoResolver` – abstraction that supplies serializable members for a type. The default implementation uses reflection but source generators can provide AOT friendly metadata.
+- `NomadValueKind` – enumeration of primitive markers used by the binary writer and reader.
 - Attribute types under the `Nomad.Net.Attributes` namespace provide optional metadata:
   - `NomadFieldAttribute` – explicit field identifiers.
   - `NomadIgnoreAttribute` – skip a member.
@@ -71,9 +73,10 @@ dotnet pack src/Nomad.Net/Nomad.Net.csproj -c Release
 
 ## Ahead-Of-Time (AOT) Support
 
-The serializer can operate without runtime reflection by providing an `INomadTypeInfoResolver`
-implementation generated at compile time. This allows applications targeting
-NativeAOT to supply precomputed metadata for their types. The
-`ReflectionNomadTypeInfoResolver` remains the default for convenient dynamic
-usage.
+The library **MUST** operate in environments where runtime reflection is not
+available. All serialization metadata can be supplied at compile time via an
+implementation of <see cref="INomadTypeInfoResolver"/>. Applications targeting
+NativeAOT or similar ahead-of-time compilation models provide the resolver to
+ensure full functionality. The <see cref="ReflectionNomadTypeInfoResolver"/>
+remains the default for convenient dynamic usage when reflection is permitted.
 
