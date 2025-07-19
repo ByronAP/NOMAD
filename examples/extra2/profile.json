@@ -1,0 +1,12 @@
+{
+  "id": 16096850230640640,
+  "username": "alice_smith",
+  "email": "alice@example.com",
+  "created": 15139515768552554496,
+  "profile": {
+    "full_name": "Alice Smith",
+    "bio": null,
+    "tags": ["developer", "golang", "rust"],
+    "verified": true
+  }
+}
