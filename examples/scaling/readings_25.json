@@ -1,0 +1,130 @@
+{
+  "device_id": "SENSOR-001",
+  "readings": [
+    {
+      "temperature": 23.5,
+      "humidity": 45.0,
+      "timestamp": 1634567890
+    },
+    {
+      "temperature": 23.6,
+      "humidity": 45.1,
+      "timestamp": 1634567950
+    },
+    {
+      "temperature": 23.7,
+      "humidity": 45.2,
+      "timestamp": 1634568010
+    },
+    {
+      "temperature": 23.8,
+      "humidity": 45.3,
+      "timestamp": 1634568070
+    },
+    {
+      "temperature": 23.9,
+      "humidity": 45.4,
+      "timestamp": 1634568130
+    },
+    {
+      "temperature": 24.0,
+      "humidity": 45.5,
+      "timestamp": 1634568190
+    },
+    {
+      "temperature": 24.1,
+      "humidity": 45.6,
+      "timestamp": 1634568250
+    },
+    {
+      "temperature": 24.2,
+      "humidity": 45.7,
+      "timestamp": 1634568310
+    },
+    {
+      "temperature": 24.3,
+      "humidity": 45.8,
+      "timestamp": 1634568370
+    },
+    {
+      "temperature": 24.4,
+      "humidity": 45.9,
+      "timestamp": 1634568430
+    },
+    {
+      "temperature": 24.5,
+      "humidity": 46.0,
+      "timestamp": 1634568490
+    },
+    {
+      "temperature": 24.6,
+      "humidity": 46.1,
+      "timestamp": 1634568550
+    },
+    {
+      "temperature": 24.7,
+      "humidity": 46.2,
+      "timestamp": 1634568610
+    },
+    {
+      "temperature": 24.8,
+      "humidity": 46.3,
+      "timestamp": 1634568670
+    },
+    {
+      "temperature": 24.9,
+      "humidity": 46.4,
+      "timestamp": 1634568730
+    },
+    {
+      "temperature": 25.0,
+      "humidity": 46.5,
+      "timestamp": 1634568790
+    },
+    {
+      "temperature": 25.1,
+      "humidity": 46.6,
+      "timestamp": 1634568850
+    },
+    {
+      "temperature": 25.2,
+      "humidity": 46.7,
+      "timestamp": 1634568910
+    },
+    {
+      "temperature": 25.3,
+      "humidity": 46.8,
+      "timestamp": 1634568970
+    },
+    {
+      "temperature": 25.4,
+      "humidity": 46.9,
+      "timestamp": 1634569030
+    },
+    {
+      "temperature": 25.5,
+      "humidity": 47.0,
+      "timestamp": 1634569090
+    },
+    {
+      "temperature": 25.6,
+      "humidity": 47.1,
+      "timestamp": 1634569150
+    },
+    {
+      "temperature": 25.7,
+      "humidity": 47.2,
+      "timestamp": 1634569210
+    },
+    {
+      "temperature": 25.8,
+      "humidity": 47.3,
+      "timestamp": 1634569270
+    },
+    {
+      "temperature": 25.9,
+      "humidity": 47.4,
+      "timestamp": 1634569330
+    }
+  ]
+}
