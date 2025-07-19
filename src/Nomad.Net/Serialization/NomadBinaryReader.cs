@@ -86,6 +86,21 @@ namespace Nomad.Net.Serialization
                 return null;
             }
 
+            if (type == typeof(object))
+            {
+                return kind switch
+                {
+                    (byte)NomadValueKind.Int32 => _reader.ReadInt32(),
+                    (byte)NomadValueKind.String => _reader.ReadString(),
+                    (byte)NomadValueKind.Binary => ReadRemainingBinary(),
+                    (byte)NomadValueKind.Boolean => ReadByteInternal() != 0,
+                    (byte)NomadValueKind.Int64 => _reader.ReadInt64(),
+                    (byte)NomadValueKind.Single => _reader.ReadSingle(),
+                    (byte)NomadValueKind.Double => _reader.ReadDouble(),
+                    _ => throw new NotSupportedException($"Unsupported value kind: {kind}")
+                };
+            }
+
             if (type == typeof(int) && kind == (byte)NomadValueKind.Int32)
             {
                 return _reader.ReadInt32();
@@ -96,8 +111,7 @@ namespace Nomad.Net.Serialization
             }
             else if (type == typeof(byte[]) && kind == (byte)NomadValueKind.Binary)
             {
-                int len = _reader.ReadInt32();
-                return _reader.ReadBytes(len);
+                return ReadRemainingBinary();
             }
             else if (type == typeof(bool) && kind == (byte)NomadValueKind.Boolean)
             {
@@ -117,6 +131,12 @@ namespace Nomad.Net.Serialization
             }
 
             throw new NotSupportedException($"Unsupported type: {type}");
+        }
+
+        private byte[] ReadRemainingBinary()
+        {
+            long remaining = _reader.BaseStream.Length - _reader.BaseStream.Position;
+            return _reader.ReadBytes((int)remaining);
         }
 
         /// <inheritdoc />

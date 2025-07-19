@@ -122,15 +122,9 @@ namespace Nomad.Net.Serialization
 
                 if (!members.TryGetValue(fieldId.Value, out var member))
                 {
-                    // Unknown field - skip value
-                    try
-                    {
-                        ReadValue(reader, typeof(object));
-                    }
-                    catch (FormatException ex)
-                    {
-                        throw new NotSupportedException("Unknown field encountered", ex);
-                    }
+                    // Unknown field - skip value and signal unsupported
+                    ReadValue(reader, typeof(object));
+                    throw new NotSupportedException("Unknown field encountered");
                 }
                 else
                 {
@@ -204,6 +198,21 @@ namespace Nomad.Net.Serialization
             if (converter is not null)
             {
                 return converter.Read(reader, type);
+            }
+
+            if (type == typeof(object))
+            {
+                NomadToken token = reader.PeekToken();
+                if (token == NomadToken.StartObject)
+                {
+                    return ReadUntypedObject(reader);
+                }
+                else if (token == NomadToken.StartArray)
+                {
+                    return ReadUntypedArray(reader);
+                }
+
+                return reader.ReadValue(typeof(object));
             }
 
             if (type.IsPrimitive || type == typeof(string) || type == typeof(byte[]))
@@ -457,6 +466,82 @@ namespace Nomad.Net.Serialization
             }
 
             return result;
+        }
+
+        private Dictionary<int, object?> ReadUntypedObject(INomadReader reader)
+        {
+            if (reader.ReadToken() != NomadToken.StartObject)
+            {
+                throw new FormatException("Expected start of object.");
+            }
+
+            var result = new Dictionary<int, object?>();
+            if (reader.PeekToken() == NomadToken.EndObject)
+            {
+                reader.ReadToken();
+                return result;
+            }
+
+            while (true)
+            {
+                int? fieldId = reader.ReadFieldHeader();
+                if (fieldId is null)
+                {
+                    throw new FormatException("Unexpected end of object.");
+                }
+
+                if (reader.ReadToken() != NomadToken.NameSeparator)
+                {
+                    throw new FormatException("Expected name separator.");
+                }
+
+                result[fieldId.Value] = ReadValue(reader, typeof(object));
+
+                var token = reader.ReadToken();
+                if (token == NomadToken.EndObject)
+                {
+                    break;
+                }
+                if (token != NomadToken.ValueSeparator)
+                {
+                    throw new FormatException("Invalid object delimiter.");
+                }
+            }
+
+            return result;
+        }
+
+        private List<object?> ReadUntypedArray(INomadReader reader)
+        {
+            if (reader.ReadToken() != NomadToken.StartArray)
+            {
+                throw new FormatException("Expected start of array.");
+            }
+
+            var items = new List<object?>();
+
+            if (reader.PeekToken() == NomadToken.EndArray)
+            {
+                reader.ReadToken();
+            }
+            else
+            {
+                while (true)
+                {
+                    items.Add(ReadValue(reader, typeof(object)));
+                    var token = reader.ReadToken();
+                    if (token == NomadToken.EndArray)
+                    {
+                        break;
+                    }
+                    if (token != NomadToken.ValueSeparator)
+                    {
+                        throw new FormatException("Invalid array delimiter.");
+                    }
+                }
+            }
+
+            return items;
         }
 
         private IEnumerable<MemberInfo> GetSerializableMembers(Type type)

@@ -217,7 +217,7 @@ All implementations **MUST**:
 - Support all primitive types
 - Handle JSON-like structural syntax correctly
 - Support JSON string escaping
-- Implement varint encoding for binary data (max 10 bytes)
+- Use varint encoding for field headers (max 10 bytes)
 - Validate version headers
 - Provide clear error messages
 - Be compatible with ahead-of-time (AOT) compilation via compile-time metadata
@@ -306,7 +306,7 @@ Where:
 
 ### Binary Data Example
 
-**Binary data (type X) requires length prefixes:**
+**Binary data (type X) is encoded as raw bytes:**
 
 ```nomad
 @nomad:1
@@ -316,8 +316,8 @@ Where:
 
 Where:
 
-- `████` = varint length prefix for icon data
-- `████████████████████` = varint (16) + 16 bytes of signature
+- `████...binary data...` = icon bytes (length defined by schema)
+- `████████████████████` = 16 bytes of signature
 - Binary data can contain any bytes including structural characters
 
 ### Reading NOMAD Files (Pseudocode)
@@ -333,7 +333,7 @@ def read_value(field_type):
     elif field_type == 'S':
         return read_json_string()  # Handles escaping
     elif field_type == 'X':
-        length = read_varint()     # Binary needs length
+        length = expected_length(field_type)  # Defined by schema or structure
         return read_bytes(length)
     # ... handle other types
 
