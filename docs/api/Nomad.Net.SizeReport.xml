@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nomad.Net.SizeReport</name>
+    </assembly>
+    <members>
+        <member name="T:Nomad.Net.SizeReport.Program">
+            <summary>
+            Entry point for the NOMAD size reporting tool.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.SizeReport.Program.Main(System.String[])">
+            <summary>
+            Generates a table comparing NOMAD file sizes with their JSON equivalents.
+            </summary>
+            <param name="args">The first argument is the input directory. The second argument is an optional output file.</param>
+        </member>
+        <member name="T:Nomad.Net.SizeReport.ScenarioResult">
+            <summary>
+            Represents size information for a single scenario.
+            </summary>
+            <param name="Scenario">The scenario name.</param>
+            <param name="JsonSize">The size of the JSON representation in bytes.</param>
+            <param name="NomadSize">The size of the NOMAD representation in bytes.</param>
+        </member>
+        <member name="M:Nomad.Net.SizeReport.ScenarioResult.#ctor(System.String,System.Int64,System.Int64)">
+            <summary>
+            Represents size information for a single scenario.
+            </summary>
+            <param name="Scenario">The scenario name.</param>
+            <param name="JsonSize">The size of the JSON representation in bytes.</param>
+            <param name="NomadSize">The size of the NOMAD representation in bytes.</param>
+        </member>
+        <member name="P:Nomad.Net.SizeReport.ScenarioResult.Scenario">
+            <summary>The scenario name.</summary>
+        </member>
+        <member name="P:Nomad.Net.SizeReport.ScenarioResult.JsonSize">
+            <summary>The size of the JSON representation in bytes.</summary>
+        </member>
+        <member name="P:Nomad.Net.SizeReport.ScenarioResult.NomadSize">
+            <summary>The size of the NOMAD representation in bytes.</summary>
+        </member>
+    </members>
+</doc>
