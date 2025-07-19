@@ -19,7 +19,7 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 
 - `INomadWriter` / `INomadReader` – abstractions over the binary format.
 - `NomadBinaryWriter` / `NomadBinaryReader` – default implementations based on `System.IO`.
-  Field headers are encoded as varints and the reader enforces the 10 byte maximum
+  Field headers are encoded as varints and both the writer and reader enforce the 10 byte maximum
   mandated by the specification.
 - `INomadConverter` – extensibility point for custom serialization and deserialization.
 - `NomadSerializerOptions` – configuration container including custom converters and policy settings.
