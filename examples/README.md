@@ -53,6 +53,7 @@ Duplicate of the complex user profile example for extended testing.
 
 ### extra3/strings.nmd
 Duplicate of the escaped strings edge case for extended testing.
+
 ### scaling/readings_5.nmd
 Five sensor readings; still slightly larger than JSON.
 
@@ -70,7 +71,6 @@ Seventy-five sensor readings with noticeable reduction.
 
 ### scaling/readings_100.nmd
 One hundred sensor readings to highlight scalability.
-
 
 ## Viewing Files
 
