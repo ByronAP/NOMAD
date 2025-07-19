@@ -28,9 +28,14 @@ namespace Nomad.Net.Generator
             foreach (var tree in compilation.SyntaxTrees)
             {
                 var model = compilation.GetSemanticModel(tree);
-                foreach (var typeSyntax in tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>())
+                foreach (var typeSyntax in tree.GetRoot().DescendantNodes().OfType<TypeDeclarationSyntax>())
                 {
                     if (model.GetDeclaredSymbol(typeSyntax) is not INamedTypeSymbol typeSymbol)
+                    {
+                        continue;
+                    }
+
+                    if (typeSymbol.TypeKind != TypeKind.Class && typeSymbol.TypeKind != TypeKind.Struct)
                     {
                         continue;
                     }
