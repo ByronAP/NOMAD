@@ -20,5 +20,12 @@ namespace Nomad.Net.Serialization
         /// Gets or sets the resolver used to discover serializable members for a type.
         /// </summary>
         public INomadTypeInfoResolver TypeInfoResolver { get; set; } = new ReflectionNomadTypeInfoResolver();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to validate field identifiers during serializer construction.
+        /// When enabled the resolver is scanned for all available types and <see cref="NomadSerializer"/>
+        /// will throw if any field identifier is duplicated or less than one.
+        /// </summary>
+        public bool ValidateFieldsOnStartup { get; set; }
     }
 }

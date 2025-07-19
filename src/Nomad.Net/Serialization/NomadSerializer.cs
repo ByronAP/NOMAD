@@ -12,6 +12,7 @@ namespace Nomad.Net.Serialization
     public sealed class NomadSerializer
     {
         private readonly NomadSerializerOptions _options;
+        private readonly HashSet<Type> _validatedTypes = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NomadSerializer"/> class.
@@ -20,6 +21,11 @@ namespace Nomad.Net.Serialization
         public NomadSerializer(NomadSerializerOptions? options = null)
         {
             _options = options ?? new NomadSerializerOptions();
+
+            if (_options.ValidateFieldsOnStartup)
+            {
+                PrevalidateResolverTypes();
+            }
         }
 
         /// <summary>
@@ -47,6 +53,8 @@ namespace Nomad.Net.Serialization
 
         private void WriteObject(INomadWriter writer, object? value, Type type)
         {
+            ValidateFieldIds(type);
+
             if (value is null)
             {
                 writer.WriteValue(null, type);
@@ -564,6 +572,64 @@ namespace Nomad.Net.Serialization
             }
 
             return _options.TypeInfoResolver.GetSerializableMembers(type);
+        }
+
+        /// <summary>
+        /// Ensures the specified type's field identifiers are valid and caches the result.
+        /// </summary>
+        /// <param name="type">The type to validate.</param>
+        private void ValidateFieldIds(Type type)
+        {
+            if (_validatedTypes.Contains(type))
+            {
+                return;
+            }
+
+            var seen = new HashSet<int>();
+            foreach (var member in GetSerializableMembers(type))
+            {
+                var attr = member.GetCustomAttribute<NomadFieldAttribute>();
+                int fieldId = attr?.FieldId ?? member.MetadataToken;
+                if (fieldId <= 0)
+                {
+                    throw new InvalidOperationException($"Field ID {fieldId} on {type.FullName}.{member.Name} must be greater than zero.");
+                }
+
+                if (!seen.Add(fieldId))
+                {
+                    throw new InvalidOperationException($"Duplicate field ID {fieldId} detected on type {type.FullName}.");
+                }
+            }
+
+            _validatedTypes.Add(type);
+        }
+
+        /// <summary>
+        /// Scans all loaded assemblies using the configured resolver and validates discovered types.
+        /// </summary>
+        private void PrevalidateResolverTypes()
+        {
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] types;
+                try
+                {
+                    types = asm.GetTypes();
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    types = ex.Types.Where(t => t is not null).ToArray()!;
+                }
+
+                foreach (var type in types)
+                {
+                    var members = _options.TypeInfoResolver.GetSerializableMembers(type);
+                    if (members.Count > 0)
+                    {
+                        ValidateFieldIds(type);
+                    }
+                }
+            }
         }
     }
 }

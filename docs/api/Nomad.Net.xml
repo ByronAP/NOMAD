@@ -265,6 +265,17 @@
             <param name="type">The runtime dictionary type.</param>
             <returns>The populated dictionary instance.</returns>
         </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.ValidateFieldIds(System.Type)">
+            <summary>
+            Ensures the specified type's field identifiers are valid and caches the result.
+            </summary>
+            <param name="type">The type to validate.</param>
+        </member>
+        <member name="M:Nomad.Net.Serialization.NomadSerializer.PrevalidateResolverTypes">
+            <summary>
+            Scans all loaded assemblies using the configured resolver and validates discovered types.
+            </summary>
+        </member>
         <member name="T:Nomad.Net.Serialization.NomadSerializerOptions">
             <summary>
             Provides configuration for <see cref="T:Nomad.Net.Serialization.NomadSerializer"/>.
@@ -283,6 +294,13 @@
         <member name="P:Nomad.Net.Serialization.NomadSerializerOptions.TypeInfoResolver">
             <summary>
             Gets or sets the resolver used to discover serializable members for a type.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Serialization.NomadSerializerOptions.ValidateFieldsOnStartup">
+            <summary>
+            Gets or sets a value indicating whether to validate field identifiers during serializer construction.
+            When enabled the resolver is scanned for all available types and <see cref="T:Nomad.Net.Serialization.NomadSerializer"/>
+            will throw if any field identifier is duplicated or less than one.
             </summary>
         </member>
         <member name="T:Nomad.Net.Serialization.NomadToken">

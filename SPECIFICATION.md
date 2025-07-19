@@ -133,7 +133,7 @@ quoted-string = DQUOTE *(CHAR / escaped-char) DQUOTE
 
 #### 3.3.2. Field Identifiers
 
-Field identifiers **MUST** be positive integers (1-2147483647). The value 0 is **RESERVED** and **MUST NOT** be used. Field identifiers **SHOULD** be assigned sequentially starting from 1, but gaps are permitted.
+Field identifiers **MUST** be positive integers (1-2147483647). The value 0 is **RESERVED** and **MUST NOT** be used. Each identifier **MUST** be unique for a given type. Field identifiers **SHOULD** be assigned sequentially starting from 1, but gaps are permitted.
 
 #### 3.3.3. Field Names
 
