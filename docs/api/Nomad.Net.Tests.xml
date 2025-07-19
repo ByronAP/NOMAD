@@ -202,6 +202,24 @@
             </summary>
             <param name="value">The value to serialize.</param>
         </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Decimal(System.Decimal)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Decimal"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Char(System.Char)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Char"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Rune(System.Char)">
+            <summary>
+            Validates round-trip serialization of <see cref="T:System.Text.Rune"/> values.
+            </summary>
+            <param name="ch">The value to serialize.</param>
+        </member>
         <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_Boolean(System.Boolean)">
             <summary>
             Validates round-trip serialization of <see cref="T:System.Boolean"/> values.
@@ -232,6 +250,16 @@
         <member name="M:Nomad.Net.Tests.ReflectionResolverTests.Resolver_ReturnsExpectedMembers">
             <summary>
             Ensures the resolver filters ignored members.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.VarintDecodingTests">
+            <summary>
+            Tests for varint decoding limits.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.VarintDecodingTests.FieldHeader_TooLong_Throws">
+            <summary>
+            Ensures the reader rejects field headers exceeding 10 bytes.
             </summary>
         </member>
     </members>

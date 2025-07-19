@@ -42,21 +42,19 @@ namespace Nomad.Net.Serialization
 
             int result = 0;
             int shift = 0;
-            byte b;
-            do
+            for (int i = 0; i < 10; i++)
             {
-                b = ReadByteInternal();
+                byte b = ReadByteInternal();
                 result |= (b & 0x7F) << shift;
-                shift += 7;
-
-                if (shift > 35)
+                if ((b & 0x80) == 0)
                 {
-                    throw new FormatException("Invalid field header encoding.");
+                    return result;
                 }
-            }
-            while ((b & 0x80) != 0);
 
-            return result;
+                shift += 7;
+            }
+
+            throw new FormatException("Invalid field header encoding.");
         }
 
         /// <inheritdoc />
@@ -97,6 +95,9 @@ namespace Nomad.Net.Serialization
                     (byte)NomadValueKind.Int64 => _reader.ReadInt64(),
                     (byte)NomadValueKind.Single => _reader.ReadSingle(),
                     (byte)NomadValueKind.Double => _reader.ReadDouble(),
+                    (byte)NomadValueKind.Decimal => _reader.ReadDecimal(),
+                    (byte)NomadValueKind.Char => (char)_reader.ReadByte(),
+                    (byte)NomadValueKind.Rune => new Rune(_reader.ReadInt32()),
                     _ => throw new NotSupportedException($"Unsupported value kind: {kind}")
                 };
             }
@@ -128,6 +129,18 @@ namespace Nomad.Net.Serialization
             else if (type == typeof(double) && kind == (byte)NomadValueKind.Double)
             {
                 return _reader.ReadDouble();
+            }
+            else if (type == typeof(decimal) && kind == (byte)NomadValueKind.Decimal)
+            {
+                return _reader.ReadDecimal();
+            }
+            else if (type == typeof(char) && kind == (byte)NomadValueKind.Char)
+            {
+                return (char)_reader.ReadByte();
+            }
+            else if (type == typeof(Rune) && kind == (byte)NomadValueKind.Rune)
+            {
+                return new Rune(_reader.ReadInt32());
             }
 
             throw new NotSupportedException($"Unsupported type: {type}");

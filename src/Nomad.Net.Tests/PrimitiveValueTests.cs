@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Nomad.Net.Serialization;
 using Xunit;
 
@@ -92,6 +93,70 @@ namespace Nomad.Net.Tests
             using var reader = new NomadBinaryReader(ms);
             var result = reader.ReadValue(typeof(double));
             Assert.Equal(value, result);
+        }
+
+        /// <summary>
+        /// Validates round-trip serialization of <see cref="decimal"/> values.
+        /// </summary>
+        /// <param name="value">The value to serialize.</param>
+        [Theory]
+        [InlineData(1.5)]
+        [InlineData(-3.25)]
+        public void RoundTrip_Decimal(decimal value)
+        {
+            using var ms = new MemoryStream();
+            using (var writer = new NomadBinaryWriter(ms))
+            {
+                writer.WriteValue(value, typeof(decimal));
+            }
+
+            ms.Position = 0;
+            using var reader = new NomadBinaryReader(ms);
+            var result = reader.ReadValue(typeof(decimal));
+            Assert.Equal(value, result);
+        }
+
+        /// <summary>
+        /// Validates round-trip serialization of <see cref="char"/> values.
+        /// </summary>
+        /// <param name="value">The value to serialize.</param>
+        [Theory]
+        [InlineData('A')]
+        [InlineData('Z')]
+        public void RoundTrip_Char(char value)
+        {
+            using var ms = new MemoryStream();
+            using (var writer = new NomadBinaryWriter(ms))
+            {
+                writer.WriteValue(value, typeof(char));
+            }
+
+            ms.Position = 0;
+            using var reader = new NomadBinaryReader(ms);
+            var result = reader.ReadValue(typeof(char));
+            Assert.Equal(value, result);
+        }
+
+        /// <summary>
+        /// Validates round-trip serialization of <see cref="Rune"/> values.
+        /// </summary>
+        /// <param name="ch">The value to serialize.</param>
+        [Theory]
+        [InlineData('a')]
+        [InlineData('\u2603')]
+        public void RoundTrip_Rune(char ch)
+        {
+            var rune = new Rune(ch);
+            using var ms = new MemoryStream();
+            using (var writer = new NomadBinaryWriter(ms))
+            {
+                writer.WriteValue(rune, typeof(Rune));
+            }
+
+            ms.Position = 0;
+            using var reader = new NomadBinaryReader(ms);
+            var result = reader.ReadValue(typeof(Rune));
+            Assert.Equal(rune, result);
         }
 
         /// <summary>
