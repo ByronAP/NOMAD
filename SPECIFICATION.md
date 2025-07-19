@@ -271,6 +271,12 @@ Control characters (U+0000 through U+001F) **MUST** be escaped.
 
 Binary data (type X) **MUST** be encoded as raw bytes without any length prefix. The surrounding JSON structure or schema determines how many bytes belong to the value.
 
+A reader derives the byte count from its context:
+
+* For fields with a fixed-size type, the declared size defines the length.
+* Within arrays or objects, the closing `]` or `}` delimiter marks the end of the value.
+* For top-level values, the schema or enclosing file format specifies the expected length.
+
 ### 5.3. Null Values
 
 Fields with type specifier 'N' or nullable fields with null values **MUST** be encoded as the JSON literal `null` without quotes.

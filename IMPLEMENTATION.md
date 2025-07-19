@@ -26,7 +26,7 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `NomadValueKind` – enumeration of primitive markers used by the binary writer and reader.
 - Dynamic values declared as `object` are supported. Primitive kinds are emitted with their
   `NomadValueKind` marker, while arrays and objects are materialized as generic collections.
-- Binary data is written as raw bytes without a length prefix.
+- Binary data is written as raw bytes without a length prefix. Readers compute the length from the enclosing structure or fixed-size type information.
 - Arrays and collections are supported natively and encoded using structural delimiters without length prefixes.
 - Dictionaries are supported using the same structural delimiters with key/value pairs.
 - Attribute types under the `Nomad.Net.Attributes` namespace provide optional metadata:
