@@ -4,6 +4,7 @@ namespace Nomad.Net.Attributes
     /// Specifies the NOMAD field identifier for a member.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class NomadFieldAttribute : Attribute
     {
         /// <summary>

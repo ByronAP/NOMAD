@@ -123,7 +123,14 @@ namespace Nomad.Net.Serialization
                 if (!members.TryGetValue(fieldId.Value, out var member))
                 {
                     // Unknown field - skip value
-                    ReadValue(reader, typeof(object));
+                    try
+                    {
+                        ReadValue(reader, typeof(object));
+                    }
+                    catch (FormatException ex)
+                    {
+                        throw new NotSupportedException("Unknown field encountered", ex);
+                    }
                 }
                 else
                 {

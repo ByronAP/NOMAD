@@ -35,12 +35,28 @@ namespace Nomad.Net.Serialization
         /// <inheritdoc />
         public int? ReadFieldHeader()
         {
-            if (_reader.BaseStream.Position == _reader.BaseStream.Length)
+            if (!_hasPeeked && _reader.BaseStream.Position == _reader.BaseStream.Length)
             {
                 return null;
             }
 
-            return _reader.Read7BitEncodedInt();
+            int result = 0;
+            int shift = 0;
+            byte b;
+            do
+            {
+                b = ReadByteInternal();
+                result |= (b & 0x7F) << shift;
+                shift += 7;
+
+                if (shift > 35)
+                {
+                    throw new FormatException("Invalid field header encoding.");
+                }
+            }
+            while ((b & 0x80) != 0);
+
+            return result;
         }
 
         /// <inheritdoc />

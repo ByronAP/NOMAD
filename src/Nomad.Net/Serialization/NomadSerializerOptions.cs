@@ -3,6 +3,7 @@ namespace Nomad.Net.Serialization
     /// <summary>
     /// Provides configuration for <see cref="NomadSerializer"/>.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class NomadSerializerOptions
     {
         /// <summary>
