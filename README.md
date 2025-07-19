@@ -235,6 +235,7 @@ All implementations **MUST**:
 
 - `nomad-viewer` - GUI application for viewing NOMAD files
 - `nomad-bench` - Benchmarking tool for implementations
+- `nomad-report` - Generate size comparison reports from pairs of `.json` and `.nmd` files
 
 ## Getting Started
 
