@@ -26,13 +26,14 @@ namespace Nomad.Net.Serialization
             int count = 0;
             while (value >= 0x80)
             {
-                _writer.Write((byte)(value | 0x80));
-                value >>= 7;
-                count++;
-                if (count >= 9)
+                if (count == 9)
                 {
                     throw new FormatException("Field header exceeds 10 bytes.");
                 }
+
+                _writer.Write((byte)(value | 0x80));
+                value >>= 7;
+                count++;
             }
 
             _writer.Write((byte)value);
