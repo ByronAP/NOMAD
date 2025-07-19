@@ -44,5 +44,20 @@ namespace Nomad.Net.Serialization
         /// A 64-bit floating point value.
         /// </summary>
         Double = 7,
+
+        /// <summary>
+        /// A decimal value.
+        /// </summary>
+        Decimal = 8,
+
+        /// <summary>
+        /// A single-byte character.
+        /// </summary>
+        Char = 9,
+
+        /// <summary>
+        /// A four-byte Unicode scalar value.
+        /// </summary>
+        Rune = 10,
     }
 }

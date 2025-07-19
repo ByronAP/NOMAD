@@ -22,7 +22,20 @@ namespace Nomad.Net.Serialization
         /// <inheritdoc />
         public void WriteFieldHeader(int fieldId)
         {
-            _writer.Write7BitEncodedInt(fieldId);
+            uint value = (uint)fieldId;
+            int count = 0;
+            while (value >= 0x80)
+            {
+                _writer.Write((byte)(value | 0x80));
+                value >>= 7;
+                count++;
+                if (count >= 9)
+                {
+                    throw new FormatException("Field header exceeds 10 bytes.");
+                }
+            }
+
+            _writer.Write((byte)value);
         }
 
         /// <inheritdoc />
@@ -81,6 +94,22 @@ namespace Nomad.Net.Serialization
             {
                 _writer.Write((byte)NomadValueKind.Double);
                 _writer.Write((double)value);
+            }
+            else if (type == typeof(decimal))
+            {
+                _writer.Write((byte)NomadValueKind.Decimal);
+                _writer.Write((decimal)value);
+            }
+            else if (type == typeof(char))
+            {
+                _writer.Write((byte)NomadValueKind.Char);
+                _writer.Write((byte)(char)value);
+            }
+            else if (type == typeof(Rune))
+            {
+                _writer.Write((byte)NomadValueKind.Rune);
+                Rune rune = (Rune)value;
+                _writer.Write(rune.Value);
             }
             else
             {

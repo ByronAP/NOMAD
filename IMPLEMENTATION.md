@@ -19,6 +19,8 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 
 - `INomadWriter` / `INomadReader` – abstractions over the binary format.
 - `NomadBinaryWriter` / `NomadBinaryReader` – default implementations based on `System.IO`.
+  Field headers are encoded as varints and the reader enforces the 10 byte maximum
+  mandated by the specification.
 - `INomadConverter` – extensibility point for custom serialization and deserialization.
 - `NomadSerializerOptions` – configuration container including custom converters and policy settings.
 - `NomadSerializer` – high level serializer that reflects over objects and uses the configured writer and reader.
@@ -26,6 +28,8 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
 - `NomadValueKind` – enumeration of primitive markers used by the binary writer and reader.
 - Dynamic values declared as `object` are supported. Primitive kinds are emitted with their
   `NomadValueKind` marker, while arrays and objects are materialized as generic collections.
+  Supported kinds include integers, floating point numbers, decimals, booleans, strings,
+  binary blobs, single-byte characters and Unicode runes.
 - Binary data is written as raw bytes without a length prefix. Readers compute the length from the enclosing structure or fixed-size type information.
 - Arrays and collections are supported natively and encoded using structural delimiters without length prefixes.
 - Dictionaries are supported using the same structural delimiters with key/value pairs.
