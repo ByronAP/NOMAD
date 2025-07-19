@@ -43,6 +43,23 @@ All JSON escape sequences and special characters.
 ### binary_data.nmd
 Binary data with length prefixes.
 
+## Additional Examples
+
+### extra1/readings.nmd
+Duplicate of the simple sensor reading example for extended testing.
+
+### extra2/profile.nmd
+Duplicate of the complex user profile example for extended testing.
+
+### extra3/strings.nmd
+Duplicate of the escaped strings edge case for extended testing.
+### scaling/readings_5.nmd
+Five sensor readings; still slightly larger than JSON.
+
+### scaling/readings_50.nmd
+Fifty sensor readings; demonstrates clear size savings.
+
+
 ## Viewing Files
 
 To view the human-readable content of .nmd files, use:

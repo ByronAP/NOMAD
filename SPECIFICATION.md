@@ -48,6 +48,10 @@ The design goals for NOMAD are:
 4. Optional type validation
 5. No external schema dependencies
 
+While NOMAD aims for compactness, the version and reference sections add a
+constant overhead. Small or highly unique datasets may therefore be larger than
+their JSON equivalents.
+
 ### 1.3. Relation to Other Formats
 
 NOMAD combines concepts from several existing formats:

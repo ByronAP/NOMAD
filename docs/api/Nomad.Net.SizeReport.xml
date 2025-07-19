@@ -11,9 +11,21 @@
         </member>
         <member name="M:Nomad.Net.SizeReport.Program.Main(System.String[])">
             <summary>
-            Generates a table comparing NOMAD file sizes with their JSON equivalents.
+            Generates size comparison tables for each example set.
             </summary>
-            <param name="args">The first argument is the input directory. The second argument is an optional output file.</param>
+            <param name="args">The first argument is the root directory containing example sets. The second argument is an optional output file.</param>
+        </member>
+        <member name="T:Nomad.Net.SizeReport.ReportGenerator">
+            <summary>
+            Provides helper methods to generate size comparison results.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.SizeReport.ReportGenerator.GetScenarioResults(System.String)">
+            <summary>
+            Gets the size comparison results for the specified directory.
+            </summary>
+            <param name="inputDirectory">The directory containing paired JSON and NOMAD files.</param>
+            <returns>A list of scenario results.</returns>
         </member>
         <member name="T:Nomad.Net.SizeReport.ScenarioResult">
             <summary>
@@ -39,6 +51,26 @@
         </member>
         <member name="P:Nomad.Net.SizeReport.ScenarioResult.NomadSize">
             <summary>The size of the NOMAD representation in bytes.</summary>
+        </member>
+        <member name="T:Nomad.Net.SizeReport.ScenarioSet">
+            <summary>
+            Represents a group of scenarios with their size comparison results.
+            </summary>
+            <param name="Name">The scenario set name.</param>
+            <param name="Results">The results within the set.</param>
+        </member>
+        <member name="M:Nomad.Net.SizeReport.ScenarioSet.#ctor(System.String,System.Collections.Generic.IReadOnlyList{Nomad.Net.SizeReport.ScenarioResult})">
+            <summary>
+            Represents a group of scenarios with their size comparison results.
+            </summary>
+            <param name="Name">The scenario set name.</param>
+            <param name="Results">The results within the set.</param>
+        </member>
+        <member name="P:Nomad.Net.SizeReport.ScenarioSet.Name">
+            <summary>The scenario set name.</summary>
+        </member>
+        <member name="P:Nomad.Net.SizeReport.ScenarioSet.Results">
+            <summary>The results within the set.</summary>
         </member>
     </members>
 </doc>
