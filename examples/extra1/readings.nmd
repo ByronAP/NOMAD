@@ -1,0 +1,3 @@
+@nomad:1
+@refs{1:temperature:F32,2:humidity:F32,3:timestamp:I64}
+{1:████,2:████,3:████████}
