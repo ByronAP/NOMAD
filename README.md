@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-NOMAD is a data serialization format that combines JSON-like structure with binary-encoded values, achieving 50-90% space savings compared to JSON while maintaining structural familiarity.
+NOMAD is a data serialization format that combines JSON-like structure with binary-encoded values. It can achieve significant space savings compared to JSON on large, repetitive datasets while maintaining structural familiarity. Very small or highly unique datasets may not see size reductions due to format overhead.
 
 ## Table of Contents
 
@@ -36,7 +36,8 @@ NOMAD addresses the fundamental trade-off between human readability and storage 
 
 - Integer field IDs replace repeated string keys
 - Binary value encoding eliminates text conversion overhead
-- 50-90% smaller than JSON for typical datasets
+- Significantly smaller than JSON for large, repetitive datasets
+- Small or unique datasets may not see reductions
 
 ### 🔍 Familiar & Debuggable
 
