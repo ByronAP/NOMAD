@@ -237,5 +237,48 @@ namespace Nomad.Net.Tests
             var result = reader.ReadValue(typeof(string));
             Assert.Null(result);
         }
+
+        /// <summary>
+        /// Validates round-trip serialization of nullable <see cref="int"/> values.
+        /// </summary>
+        /// <param name="value">The value to serialize.</param>
+        [Theory]
+        [InlineData(10)]
+        [InlineData(null)]
+        public void RoundTrip_NullableInt32(int? value)
+        {
+            using var ms = new MemoryStream();
+            using (var writer = new NomadBinaryWriter(ms))
+            {
+                writer.WriteValue(value, typeof(int?));
+            }
+
+            ms.Position = 0;
+            using var reader = new NomadBinaryReader(ms);
+            var result = reader.ReadValue(typeof(int?));
+            Assert.Equal(value, result);
+        }
+
+        /// <summary>
+        /// Validates round-trip serialization of nullable <see cref="bool"/> values.
+        /// </summary>
+        /// <param name="value">The value to serialize.</param>
+        [Theory]
+        [InlineData(true)]
+        [InlineData(null)]
+        [InlineData(false)]
+        public void RoundTrip_NullableBoolean(bool? value)
+        {
+            using var ms = new MemoryStream();
+            using (var writer = new NomadBinaryWriter(ms))
+            {
+                writer.WriteValue(value, typeof(bool?));
+            }
+
+            ms.Position = 0;
+            using var reader = new NomadBinaryReader(ms);
+            var result = reader.ReadValue(typeof(bool?));
+            Assert.Equal(value, result);
+        }
     }
 }

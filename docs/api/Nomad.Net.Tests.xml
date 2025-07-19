@@ -173,6 +173,11 @@
             Demonstrates behavior when encountering an unknown field.
             </summary>
         </member>
+        <member name="M:Nomad.Net.Tests.ObjectSerializationTests.NullableField_SerializesNull">
+            <summary>
+            Ensures nullable fields are represented as null tokens when serialized.
+            </summary>
+        </member>
         <member name="T:Nomad.Net.Tests.PrimitiveValueTests">
             <summary>
             Tests primitive value serialization.
@@ -241,6 +246,18 @@
             <summary>
             Validates round-trip serialization of <see langword="null"/> values.
             </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_NullableInt32(System.Nullable{System.Int32})">
+            <summary>
+            Validates round-trip serialization of nullable <see cref="T:System.Int32"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
+        </member>
+        <member name="M:Nomad.Net.Tests.PrimitiveValueTests.RoundTrip_NullableBoolean(System.Nullable{System.Boolean})">
+            <summary>
+            Validates round-trip serialization of nullable <see cref="T:System.Boolean"/> values.
+            </summary>
+            <param name="value">The value to serialize.</param>
         </member>
         <member name="T:Nomad.Net.Tests.ReflectionResolverTests">
             <summary>

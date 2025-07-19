@@ -30,6 +30,8 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
   `NomadValueKind` marker, while arrays and objects are materialized as generic collections.
   Supported kinds include integers, floating point numbers, decimals, booleans, strings,
   binary blobs, single-byte characters and Unicode runes.
+- Nullable primitive types are detected via `Nullable.GetUnderlyingType` and serialized as
+  their underlying kind. A `null` value is encoded using the `NomadValueKind.Null` marker.
 - Binary data is written as raw bytes without a length prefix. Readers compute the length from the enclosing structure or fixed-size type information.
 - Arrays and collections are supported natively and encoded using structural delimiters without length prefixes.
 - Dictionaries are supported using the same structural delimiters with key/value pairs.
