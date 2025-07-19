@@ -78,10 +78,21 @@ namespace Nomad.Net.Serialization
         /// <inheritdoc />
         public object? ReadValue(Type type)
         {
+            Type? underlyingType = Nullable.GetUnderlyingType(type);
             byte kind = ReadByteInternal();
             if (kind == (byte)NomadValueKind.Null)
             {
-                return null;
+                if (underlyingType is not null || !type.IsValueType)
+                {
+                    return null;
+                }
+
+                throw new FormatException($"Cannot assign null to non-nullable type {type}");
+            }
+
+            if (underlyingType is not null)
+            {
+                type = underlyingType;
             }
 
             if (type == typeof(object))

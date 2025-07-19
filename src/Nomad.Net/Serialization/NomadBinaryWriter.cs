@@ -47,6 +47,18 @@ namespace Nomad.Net.Serialization
         /// <inheritdoc />
         public void WriteValue(object? value, Type type)
         {
+            Type? underlyingType = Nullable.GetUnderlyingType(type);
+            if (underlyingType is not null)
+            {
+                if (value is null)
+                {
+                    _writer.Write((byte)NomadValueKind.Null);
+                    return;
+                }
+
+                type = underlyingType;
+            }
+
             if (value is null)
             {
                 _writer.Write((byte)NomadValueKind.Null);
