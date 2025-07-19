@@ -50,5 +50,37 @@ namespace Nomad.Net.Tests
             using var reader = new NomadBinaryReader(ms);
             Assert.Throws<NotSupportedException>(() => serializer.Deserialize<Person>(reader));
         }
+
+        /// <summary>
+        /// Ensures nullable fields are represented as null tokens when serialized.
+        /// </summary>
+        [Fact]
+        public void NullableField_SerializesNull()
+        {
+            var serializer = new NomadSerializer();
+            var person = new Person { Id = 5, Name = null };
+            using var ms = new MemoryStream();
+            using (var writer = new NomadBinaryWriter(ms))
+            {
+                serializer.Serialize(writer, person);
+            }
+
+            ms.Position = 0;
+            using var reader = new NomadBinaryReader(ms);
+            Assert.Equal(NomadToken.StartObject, reader.ReadToken());
+
+            int? fieldId = reader.ReadFieldHeader();
+            Assert.Equal(1, fieldId);
+            Assert.Equal(NomadToken.NameSeparator, reader.ReadToken());
+            Assert.Equal(person.Id, reader.ReadValue(typeof(int)));
+
+            Assert.Equal(NomadToken.ValueSeparator, reader.ReadToken());
+            fieldId = reader.ReadFieldHeader();
+            Assert.Equal(2, fieldId);
+            Assert.Equal(NomadToken.NameSeparator, reader.ReadToken());
+            Assert.Null(reader.ReadValue(typeof(string)));
+
+            Assert.Equal(NomadToken.EndObject, reader.ReadToken());
+        }
     }
 }

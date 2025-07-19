@@ -65,10 +65,12 @@ namespace Nomad.Net.Serialization
                     _ => null,
                 };
 
-                if (memberValue is null)
+                Type memberType = member switch
                 {
-                    continue;
-                }
+                    PropertyInfo pi => pi.PropertyType,
+                    FieldInfo fi => fi.FieldType,
+                    _ => typeof(object),
+                };
 
                 var fieldAttr = member.GetCustomAttribute<NomadFieldAttribute>();
                 if (fieldAttr is null && _options.RequireFieldAttribute)
@@ -84,7 +86,14 @@ namespace Nomad.Net.Serialization
                 int fieldId = fieldAttr?.FieldId ?? member.MetadataToken;
                 writer.WriteFieldHeader(fieldId);
                 writer.WriteToken(NomadToken.NameSeparator);
-                WriteValue(writer, memberValue, memberValue.GetType());
+                if (memberValue is null)
+                {
+                    WriteValue(writer, null, memberType);
+                }
+                else
+                {
+                    WriteValue(writer, memberValue, memberValue.GetType());
+                }
                 first = false;
             }
 
