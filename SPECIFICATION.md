@@ -205,9 +205,10 @@ The following type specifiers are defined:
 |-----------|------|----------|
 | B | Boolean | 1 byte (0x00=false, 0x01=true) |
 | S | String | UTF-8 with JSON escaping |
-| X | Binary | Length prefix + raw bytes |
+| X | Binary | Raw bytes |
 | C | Character | Single byte |
 | R | Rune | 4-byte Unicode code point (UTF-32) |
+| O | Object | Runtime-determined encoding |
 | N | Null | No bytes (presence only) |
 
 ### 4.2. Complex Types
@@ -268,24 +269,7 @@ Control characters (U+0000 through U+001F) **MUST** be escaped.
 
 #### 5.2.2. Binary Encoding
 
-Binary data (type X) **MUST** be encoded as:
-
-1. Length in bytes as a variable-length integer (varint)
-2. Raw binary bytes
-
-The varint encoding follows these rules:
-
-```none
-MSB                            LSB
- 0xxxxxxx                      = 0-127
- 1xxxxxxx 0xxxxxxx             = 128-16383
- 1xxxxxxx 1xxxxxxx 0xxxxxxx    = 16384-2097151
- etc.
-```
-
-The maximum varint length **MUST NOT** exceed 10 bytes.
-
-Binary data is the only type that requires a length prefix because it may contain structural characters.
+Binary data (type X) **MUST** be encoded as raw bytes without any length prefix. The surrounding JSON structure or schema determines how many bytes belong to the value.
 
 ### 5.3. Null Values
 
@@ -313,6 +297,15 @@ Maps **MUST** be encoded as objects where keys and values alternate:
 
 Empty maps **MUST** be encoded as: `{}`
 
+### 5.6. Dynamic Values
+
+Fields declared with the `O` type specifier **MAY** contain any value. Primitive
+values **MUST** begin with a `NomadValueKind` marker followed by the encoded
+bytes for that kind. Arrays and objects use the standard structural tokens and
+MAY nest other dynamic values recursively. Parsers **SHOULD** materialize such
+values using generic collections (e.g., `List<object?>` for arrays and
+`Dictionary<int, object?>` for objects).
+
 ## 6. Parsing Rules
 
 ### 6.1. Parser Requirements
@@ -325,7 +318,7 @@ A conforming NOMAD parser **MUST**:
 4. Use type information to determine value byte consumption
 5. Recognize all structural characters
 6. Handle JSON string escape sequences
-7. Handle varint decoding for binary data lengths
+7. Handle varint decoding for field headers
 8. Enforce the 10-byte maximum for varint decoding
 
 ### 6.2. Error Handling
@@ -434,7 +427,7 @@ A conforming NOMAD writer **MUST**:
 4. Encode values according to their declared types
 5. Use correct JSON structural characters
 6. Properly escape strings using JSON rules
-7. Encode binary data with varint length prefixes
+7. Encode binary data as raw bytes
 8. Produce files with the .nmd extension
 
 ### 8.2. Reader Conformance
@@ -446,7 +439,7 @@ A conforming NOMAD reader **MUST**:
 3. Parse the complete reference section before data
 4. Support all primitive types
 5. Handle JSON string escape sequences
-6. Implement varint decoding for binary data
+6. Implement varint decoding for field headers
 7. Implement error recovery for unknown fields
 8. Enforce the 10-byte maximum for varint decoding
 
@@ -501,7 +494,6 @@ Implementations **MUST**:
 
 Implementations **MUST**:
 
-- Validate varint length encoding
 - Check for integer overflow in length calculations
 - Ensure binary data does not exceed stated length
 - Validate length against available input
@@ -568,7 +560,6 @@ Where binary values are:
 
 Where field 5 (binary data) has:
 
-- `██` = varint length prefix
 - `████████...raw bytes...` = actual binary data
 
 ### 11.3. Nested Structure
@@ -617,8 +608,8 @@ Where field 5 (binary data) has:
 
 Where:
 
-- Field 2: `█` = varint indicating thumbnail size, followed by raw PNG bytes
-- Field 3: `█` = varint (16), followed by 16 bytes of MD5 checksum
+- Field 2: `█████...PNG data...` = thumbnail bytes
+- Field 3: `████████████████████` = 16 bytes of MD5 checksum
 
 ### 11.6. File Size Comparison
 

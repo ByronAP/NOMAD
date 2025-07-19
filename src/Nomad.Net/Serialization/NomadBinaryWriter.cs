@@ -40,6 +40,12 @@ namespace Nomad.Net.Serialization
                 return;
             }
 
+            if (type == typeof(object))
+            {
+                WriteValue(value, value.GetType());
+                return;
+            }
+
             if (type == typeof(int))
             {
                 _writer.Write((byte)NomadValueKind.Int32);
@@ -54,7 +60,6 @@ namespace Nomad.Net.Serialization
             {
                 _writer.Write((byte)NomadValueKind.Binary);
                 var buffer = (byte[])value;
-                _writer.Write(buffer.Length);
                 _writer.Write(buffer);
             }
             else if (type == typeof(bool))

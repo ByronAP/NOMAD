@@ -29,6 +29,21 @@
             Exercises a custom converter for <see cref="T:System.Guid"/> values.
             </summary>
         </member>
+        <member name="T:Nomad.Net.Tests.DynamicValueTests">
+            <summary>
+            Tests serialization when the declared type is <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.DynamicValueTests.RoundTrip_ObjectPrimitive">
+            <summary>
+            Verifies round-trip of a primitive value stored as <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.DynamicValueTests.RoundTrip_ObjectArray">
+            <summary>
+            Verifies round-trip of an array stored as <see cref="T:System.Object"/>.
+            </summary>
+        </member>
         <member name="T:Nomad.Net.Tests.GuidConverter">
             <summary>
             Converter for <see cref="T:System.Guid"/> values using string representation.
@@ -42,6 +57,31 @@
         </member>
         <member name="M:Nomad.Net.Tests.GuidConverter.Read(Nomad.Net.Serialization.INomadReader,System.Type)">
             <inheritdoc />
+        </member>
+        <member name="T:Nomad.Net.Tests.MapSerializationTests">
+            <summary>
+            Tests dictionary serialization semantics.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.MapSerializationTests.RoundTrip_Dictionary">
+            <summary>
+            Ensures dictionaries round-trip correctly.
+            </summary>
+        </member>
+        <member name="M:Nomad.Net.Tests.MapSerializationTests.RoundTrip_EmptyDictionary">
+            <summary>
+            Ensures empty dictionaries are supported.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.DictionaryContainer">
+            <summary>
+            Model containing a dictionary for serialization tests.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.DictionaryContainer.Values">
+            <summary>
+            Gets or sets the values keyed by string.
+            </summary>
         </member>
         <member name="T:Nomad.Net.Tests.Models.GuidContainer">
             <summary>
@@ -61,6 +101,16 @@
         <member name="P:Nomad.Net.Tests.Models.IntArrayContainer.Values">
             <summary>
             Gets or sets the values.
+            </summary>
+        </member>
+        <member name="T:Nomad.Net.Tests.Models.ObjectContainer">
+            <summary>
+            Model containing a value of type <see cref="T:System.Object"/> for dynamic tests.
+            </summary>
+        </member>
+        <member name="P:Nomad.Net.Tests.Models.ObjectContainer.Value">
+            <summary>
+            Gets or sets the arbitrary value.
             </summary>
         </member>
         <member name="T:Nomad.Net.Tests.Models.Person">
