@@ -6,6 +6,7 @@ namespace Nomad.Net.Serialization
     /// <summary>
     /// Resolves serializable members using runtime reflection.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class ReflectionNomadTypeInfoResolver : INomadTypeInfoResolver
     {
         /// <inheritdoc />

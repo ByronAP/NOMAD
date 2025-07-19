@@ -7,6 +7,7 @@ namespace Nomad.Net.Attributes
     /// to use for the annotated type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class NomadResolverAttribute : Attribute
     {
         /// <summary>

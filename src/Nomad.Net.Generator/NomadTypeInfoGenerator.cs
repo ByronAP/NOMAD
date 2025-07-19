@@ -75,6 +75,7 @@ namespace Nomad.Net.Generator
             sb.AppendLine("    /// <summary>");
             sb.AppendLine("    /// Resolver generated at compile time.");
             sb.AppendLine("    /// </summary>");
+            sb.AppendLine("    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]");
             sb.AppendLine("    internal sealed class GeneratedNomadTypeInfoResolver : INomadTypeInfoResolver");
             sb.AppendLine("    {");
             sb.AppendLine("        private static readonly Dictionary<Type, MemberInfo[]> Map = new()");

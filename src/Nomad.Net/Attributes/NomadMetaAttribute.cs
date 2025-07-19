@@ -4,6 +4,7 @@ namespace Nomad.Net.Attributes
     /// Provides an extensible mechanism to attach custom metadata to a member.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true)]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class NomadMetaAttribute : Attribute
     {
         /// <summary>
