@@ -225,6 +225,10 @@ All implementations **MUST**:
 
 ## Tools
 
+### Included Tools
+
+- `nomad-report` - Generates size comparison tables for the example data sets. The tool runs against each set to aid regression testing and public comparisons.
+
 ### Planned Tools
 
 - `nomad-cli` - Command-line tool for working with NOMAD files
@@ -235,7 +239,6 @@ All implementations **MUST**:
 
 - `nomad-viewer` - GUI application for viewing NOMAD files
 - `nomad-bench` - Benchmarking tool for implementations
-- `nomad-report` - Generate size comparison reports from pairs of `.json` and `.nmd` files
 
 ## Getting Started
 

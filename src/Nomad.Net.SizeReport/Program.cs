@@ -1,8 +1,8 @@
+namespace Nomad.Net.SizeReport;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-
-namespace Nomad.Net.SizeReport;
 
 /// <summary>
 /// Entry point for the NOMAD size reporting tool.
@@ -10,39 +10,36 @@ namespace Nomad.Net.SizeReport;
 internal static class Program
 {
     /// <summary>
-    /// Generates a table comparing NOMAD file sizes with their JSON equivalents.
+    /// Generates size comparison tables for each example set.
     /// </summary>
-    /// <param name="args">The first argument is the input directory. The second argument is an optional output file.</param>
+    /// <param name="args">The first argument is the root directory containing example sets. The second argument is an optional output file.</param>
     public static void Main(string[] args)
     {
         string inputDirectory = args.Length > 0 ? args[0] : Path.Combine("..", "examples");
         string? outputFile = args.Length > 1 ? args[1] : null;
 
-        List<ScenarioResult> results = new();
-        foreach (string jsonPath in Directory.EnumerateFiles(inputDirectory, "*.json", SearchOption.AllDirectories))
+        var lines = new List<string>();
+
+        foreach (string setDirectory in Directory.GetDirectories(inputDirectory))
         {
-            string nomadPath = Path.ChangeExtension(jsonPath, ".nmd");
-            if (!File.Exists(nomadPath))
+            string setName = Path.GetFileName(setDirectory);
+            IReadOnlyList<ScenarioResult> results = ReportGenerator.GetScenarioResults(setDirectory);
+            if (results.Count == 0)
             {
                 continue;
             }
 
-            long jsonSize = new FileInfo(jsonPath).Length;
-            long nomadSize = new FileInfo(nomadPath).Length;
-            string scenarioName = Path.GetFileNameWithoutExtension(jsonPath);
-            results.Add(new ScenarioResult(scenarioName, jsonSize, nomadSize));
-        }
+            lines.Add($"### {setName}");
+            lines.Add("| Scenario | JSON Size | NOMAD Size | Reduction |");
+            lines.Add("|---------|----------|-----------|----------|");
 
-        var lines = new List<string>
-        {
-            "| Scenario | JSON Size | NOMAD Size | Reduction |",
-            "|---------|----------|-----------|----------|",
-        };
+            foreach (ScenarioResult result in results)
+            {
+                double reduction = 1d - ((double)result.NomadSize / result.JsonSize);
+                lines.Add($"| {result.Scenario} | {result.JsonSize} B | {result.NomadSize} B | {reduction:P0} |");
+            }
 
-        foreach (ScenarioResult result in results)
-        {
-            double reduction = 1d - ((double)result.NomadSize / result.JsonSize);
-            lines.Add($"| {result.Scenario} | {result.JsonSize} B | {result.NomadSize} B | {reduction:P0} |");
+            lines.Add(string.Empty);
         }
 
         foreach (string line in lines)
