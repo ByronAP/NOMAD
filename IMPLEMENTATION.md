@@ -38,6 +38,7 @@ The library is implemented in the `src/Nomad.Net` folder. It targets **.NET 9.0*
   - `NomadIgnoreAttribute` – skip a member.
   - `NomadMetaAttribute` – custom metadata similar to JSON annotations.
   - `NomadResolverAttribute` – specify a custom `INomadTypeInfoResolver` for a type using `NomadResolver("My.Custom.Resolver")`.
+  - Attributes apply equally to classes and structs so value types can participate in serialization.
 
 ## Using the Library
 

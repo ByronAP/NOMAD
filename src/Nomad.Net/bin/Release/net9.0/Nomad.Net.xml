@@ -365,6 +365,21 @@
             A 64-bit floating point value.
             </summary>
         </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Decimal">
+            <summary>
+            A decimal value.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Char">
+            <summary>
+            A single-byte character.
+            </summary>
+        </member>
+        <member name="F:Nomad.Net.Serialization.NomadValueKind.Rune">
+            <summary>
+            A four-byte Unicode scalar value.
+            </summary>
+        </member>
         <member name="T:Nomad.Net.Serialization.ReflectionNomadTypeInfoResolver">
             <summary>
             Resolves serializable members using runtime reflection.
