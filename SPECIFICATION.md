@@ -350,9 +350,8 @@ The following conditions **SHOULD** be handled gracefully:
 - Fields present that are marked deprecated
 
 > **Implementation Note:**
-> The reference .NET library included in this repository currently throws a
-> `NotSupportedException` when an unknown field is encountered during
-> deserialization. Future versions are expected to properly skip such fields.
+> The reference .NET library included in this repository skips unknown fields
+> encountered during deserialization.
 
 ### 6.3. Parsing Algorithm
 

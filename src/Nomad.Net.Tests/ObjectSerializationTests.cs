@@ -48,7 +48,10 @@ namespace Nomad.Net.Tests
 
             ms.Position = 0;
             using var reader = new NomadBinaryReader(ms);
-            Assert.Throws<NotSupportedException>(() => serializer.Deserialize<Person>(reader));
+            var result = serializer.Deserialize<Person>(reader);
+            Assert.NotNull(result);
+            Assert.Equal(v2.Id, result!.Id);
+            Assert.Equal(v2.Name, result.Name);
         }
 
         /// <summary>
